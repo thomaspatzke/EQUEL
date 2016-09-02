@@ -1,0 +1,4 @@
+*.swp
+*.class
+*.pyc
+pyenv/
