@@ -55,4 +55,5 @@ value:
     UnquotedValue |
     SingleQuotedValue |
     DoubleQuotedValue |
-    LParV searchExpr RPar;
+    LParS searchExpr RParS |
+    LParL value ( LSep value )* RParL ;

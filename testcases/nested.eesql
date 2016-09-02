@@ -1,1 +1,1 @@
-nested path=response.header query=(match name=content-security-policy)
+nested path=response.header query=(match response.header.name=content-security-policy)
