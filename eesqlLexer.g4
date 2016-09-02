@@ -8,15 +8,17 @@ POSTPROC: 'postproc' ;
 OUTPUT: 'output' ;
 
 Separator: '|' ;
-Equals: '=' -> pushMode(VALUE) ;
-Identifier: [a-zA-Z0-9_]+ ;
 RPar: ')' -> popMode ;
+Equals: '=' -> pushMode(VALUE) ;
+Colon: ':' -> pushMode(VALUE) ;
+Identifier: [a-zA-Z0-9_]+ ;
 
 WS: [ \t\n\r]+ -> skip;
 
 mode VALUE ;
+VWS: [ \t\n\r]+ -> skip;
+LParV: '(' -> pushMode(DEFAULT_MODE) ;
 SingleQuotedValue: '\'' ~[']+ '\'' -> popMode ;
 DoubleQuotedValue: '"' ~["]+ '"' -> popMode ;
-UnquotedValue: ~[ ]+ -> popMode ;
+UnquotedValue: ~[(]~[ )\t\n\r]* -> popMode ;
 // TODO: add quote char escaping (\")
-LParV: '(' -> pushMode(DEFAULT_MODE) ;

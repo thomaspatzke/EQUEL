@@ -39,8 +39,9 @@ outputExpr:
     genericExpr ;
 
 searchShortcut:
-    SingleQuotedValue |
-    DoubleQuotedValue
+    Colon SingleQuotedValue |
+    Colon DoubleQuotedValue |
+    Colon UnquotedValue
     ;
 
 parameter:

@@ -1,0 +1,1 @@
+:"field:value AND foo:bar" | agg max field=cost
