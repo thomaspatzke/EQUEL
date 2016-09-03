@@ -24,5 +24,5 @@ LSep: ',' -> pushMode(VALUE) ;
 RParL: ']' -> popMode ;
 SingleQuotedValue: '\'' ~[']+ '\'' -> popMode ;
 DoubleQuotedValue: '"' ~["]+ '"' -> popMode ;
-UnquotedValue: ~[,([{ )\]}\t\n\r]* -> popMode ;
+UnquotedValue: ~[,([{ )\]}\t\n\r]+ -> popMode ;
 // TODO: add quote char escaping (\")
