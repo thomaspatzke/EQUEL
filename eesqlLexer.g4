@@ -2,7 +2,6 @@ lexer grammar eesqlLexer ;
 //options { language=Python3; }
 
 AS: 'as' ;
-FILTER: 'filter' ;
 AGG: 'agg' ;
 POSTPROC: 'postproc' ;
 OUTPUT: 'output' ;
@@ -10,7 +9,7 @@ OUTPUT: 'output' ;
 Separator: '|' ;
 RParS: ')' -> popMode ;
 Equals: '=' -> pushMode(VALUE) ;
-Colon: ':' -> pushMode(VALUE) ;
+PrefixChar: [:&<>!#+-] -> pushMode(VALUE) ;
 Identifier: [a-zA-Z0-9_.]+ ;
 
 WS: [ \t\n\r]+ -> skip;

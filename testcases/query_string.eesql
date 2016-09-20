@@ -1,0 +1,1 @@
+query_string query="test:val foo:bar" lenient default_operator=AND

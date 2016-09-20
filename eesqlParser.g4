@@ -3,17 +3,16 @@ parser grammar eesqlParser ;
 options { tokenVocab=eesqlLexer; }
 
 eesql:
-    searchExpr ( Separator FILTER filterExpr ( Separator filterExpr )* )? ( Separator AGG aggregationExpr ( Separator aggregationExpr )* )? ( Separator POSTPROC postprocExpr ( Separator postprocExpr )* )? ( Separator OUTPUT outputExpr ( Separator outputExpr )* )? ;
+    searchExpr ( Separator searchExpr )* ( Separator AGG aggregationExpr ( Separator aggregationExpr )* )? ( Separator POSTPROC postprocExpr ( Separator postprocExpr )* )? ( Separator OUTPUT outputExpr ( Separator outputExpr )* )? ;
 
 verb: Identifier ;
 
 genericExpr:
-    verb ( parameter )* ;
+    verb ( parameter )* # generic |
+    shortcutExpr # shortcut;
 
 searchExpr:
-//    orSearchExpr |
-    genericExpr |
-    searchShortcut;
+    genericExpr ;
 
 /*
 orSearchExpr:
@@ -38,22 +37,19 @@ postprocExpr:
 outputExpr:
     genericExpr ;
 
-searchShortcut:
-    Colon SingleQuotedValue |
-    Colon DoubleQuotedValue |
-    Colon UnquotedValue
-    ;
+shortcutExpr:
+    PrefixChar value ;
 
 parameter:
-    name Equals value |
-    Identifier;
+    name Equals value # KVParam |
+    Identifier # SingleParam;
 
 name:
     Identifier ;
 
 value:
-    UnquotedValue |
-    SingleQuotedValue |
-    DoubleQuotedValue |
-    LParS searchExpr RParS |
-    LParL value ( LSep value )* RParL ;
+    UnquotedValue # SimpleUQValue |
+    SingleQuotedValue # SimpleSQValue |
+    DoubleQuotedValue # SimpleDQValue |
+    LParS searchExpr RParS # NestedSearch |
+    LParL value ( LSep value )* RParL # ValueList;

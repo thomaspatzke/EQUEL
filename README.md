@@ -112,6 +112,12 @@ above:
 
 Parameters are passed as set (switches) and associative arrays (maps) to the plugin.
 
+## API
+
+### Usage
+
+### Extension
+
 ## Future Plans
 
 So many ideas, so little time...
@@ -137,6 +143,10 @@ Search expressions in a later position that use results from previous EESQL sube
 
 Example: search for spawning command line interpreters from uncommon processes and use session identifier to display
 actions performed in the spawned shells.
+
+### Relaxation of Strict Subexpression Type Order
+
+Example: output subexpression for intermediate results.
 
 ### Remove Subexpression Type Declarations
 
