@@ -23,20 +23,20 @@ output formats can be added to such an expression.
 
 Generally, EESQL expressions are built as follows:
 
-search | filter_1 | ... | aggregation_1 | ... | postprocessing_1 | ... | output_1 | ...
+search | searchmodifier\_1 |  ... | aggregation\_1 | ... | postprocessing\_1 | ... | output\_1 | ...
 
-Each part in an EESQL expression is called subexpression. ALl EESQL expression begin with exactly one search
+Each part in an EESQL expression is called subexpression. All EESQL expression begin with exactly one search
 subexpression that aquires the data on which the further subexpressions operate. The search is followed by an arbitrary
-number of filters, aggregations, post-processing instructions and outputs. Searches, filters and aggregations are
-handled completely by ElasticSearch, postprocessing and output is EESQL functionality. The output of the last search,
-aggregation or post-processing module is fanned out to an arbitrary number of output modules that can be stored/shown
-parallel.
+number of search modifiers (e.g. sorting, field filtering), aggregations, post-processing instructions and outputs.
+Searches, search modifiers and aggregations are handled completely by ElasticSearch, postprocessing and output is EESQL
+functionality. The output of the last search, aggregation or post-processing module is fanned out to an arbitrary number
+of output modules that can be stored/shown parallel.
 
 ### General Subexpression Syntax
 
 Subexpressions are built as follows:
 
-type verb switch_1 ... parameter_1=value_1 ...
+type verb switch\_1 ... parameter\_1=value\_1 ...
 
 The type defines the type of the rule: filter, agg, postproc and output. The first subexpression from a new type must be
 prepended with this keyword for disambiguation reasons. A verb refers to a plugin, which is a piece of code that follows
@@ -90,7 +90,9 @@ follows the syntax stated above and can end with a name assignment by:
 ... | agg ... as name | ...
 ```
 
-This name can be used to refer to a particular aggregation from postprocessing and output plugins.
+The name can be used to refer to a particular aggregation from postprocessing and output plugins. Further aggregations
+are nested into the previous aggregation. If the agg keyword is used in a later aggregation, it creates a new
+aggregation instead of the default nesting behavior.
 
 #### Postprocessing and Output Expressions
 
@@ -104,7 +106,7 @@ EESQL is implemented in a plugin architecture. Plugins can register for a verb w
 to address the plugin. The following plugin types are specified according to the expression syntax and semantics defined
 above:
 
-* search/filter plugin: generates a query DSL expression
+* search/search modifier plugin: generates a query DSL expression
 * aggregation plugin: adds/nests an aggregation expression to a ElasticSearch Query DSL query.
 * postprocessing plugin: gets an ElasticSearch result tree, changes it and passes it to the next postprocessing module or to
   all following output modules.
