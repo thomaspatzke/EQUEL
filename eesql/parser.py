@@ -58,6 +58,9 @@ class EESQLParserListener(eesqlParserListener):
     def exitKVParam(self, ctx):
         ctx.param = Parameter(ctx.name().Identifier().getText(), ctx.value().text)
 
+    def exitUnnamedList(self, ctx):
+        ctx.param = Parameter(None, list(map(lambda c: c.text, ctx.value())))
+
     def exitSingleParam(self, ctx):
         ctx.param = Parameter(ctx.Identifier().getText())
 

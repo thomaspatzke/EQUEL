@@ -107,6 +107,15 @@ class eesqlParserListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by eesqlParser#UnnamedList.
+    def enterUnnamedList(self, ctx:eesqlParser.UnnamedListContext):
+        pass
+
+    # Exit a parse tree produced by eesqlParser#UnnamedList.
+    def exitUnnamedList(self, ctx:eesqlParser.UnnamedListContext):
+        pass
+
+
     # Enter a parse tree produced by eesqlParser#SingleParam.
     def enterSingleParam(self, ctx:eesqlParser.SingleParamContext):
         pass

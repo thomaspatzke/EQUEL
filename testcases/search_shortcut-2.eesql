@@ -1,1 +1,1 @@
-&"EventID:4624 LogonType:3" | sort s=[ComputerName,TargetDomainName,TargetUsername,@timestamp-] | fields f=[@timestamp,ComputerName,TargetDomainName,TargetUsername]
+&"EventID:4624 LogonType:3" | sort [ComputerName,TargetDomainName,TargetUsername,@timestamp-] | fields [@timestamp,ComputerName,TargetDomainName,TargetUsername]

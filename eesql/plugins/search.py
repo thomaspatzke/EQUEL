@@ -46,15 +46,17 @@ class SortPlugin(BasePlugin):
 
     def apply(self, verb, params):
         try:
-            fields = params["s"]
+            fields = params["unnamed_list"]
         except KeyError:
-            raise EESQLPluginException("Expression 'sort' requires parameter 's'")
+            raise EESQLPluginException("Expression 'sort' requires list of fields")
 
-        if type(fields) == list:
-            for field in fields:
-                self.appendField(field)
-        else:
-            self.appendField(fields)
+        if len(fields) == 0:
+            raise EESQLPluginException("List of fields of sort expression must not be empty")
+        elif type(fields[0]) == list:
+            raise EESQLPluginException("Only one list of fields in sort expression is allowed")
+
+        for field in fields:
+            self.appendField(field)
 
         return { "sort": self.sortfields }
 
@@ -65,11 +67,13 @@ class FieldFilterPlugin(BasePlugin):
 
     def apply(self, verb, params):
         try:
-            fields = params["f"]
+            fields = params["unnamed_list"]
         except KeyError:
-            raise EESQLPluginException("Expression 'fields' requires parameter 'f'")
+            raise EESQLPluginException("Expression 'filter' requires list of fields")
 
-        if type(fields) != list:
-            raise EESQLPluginException("Parameter 'f' must be a list")
+        if len(fields) == 0:
+            raise EESQLPluginException("List of fields of sort expression must not be empty")
+        elif type(fields[0]) == list:
+            raise EESQLPluginException("Only one list of fields in sort expression is allowed")
 
         return { "_source": fields }

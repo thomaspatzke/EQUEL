@@ -64,6 +64,11 @@ class eesqlParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by eesqlParser#UnnamedList.
+    def visitUnnamedList(self, ctx:eesqlParser.UnnamedListContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by eesqlParser#SingleParam.
     def visitSingleParam(self, ctx:eesqlParser.SingleParamContext):
         return self.visitChildren(ctx)

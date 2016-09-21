@@ -8,10 +8,10 @@ OUTPUT: 'output' ;
 
 Separator: '|' ;
 RParS: ')' -> popMode ;
+LParLD: '[' -> pushMode(VALUE), pushMode(VALUE), type(LParL) ;
 Equals: '=' -> pushMode(VALUE) ;
 PrefixChar: [:&<>!#+-] -> pushMode(VALUE) ;
 Identifier: [a-zA-Z0-9_.]+ ;
-
 WS: [ \t\n\r]+ -> skip;
 
 mode VALUE ;

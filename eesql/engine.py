@@ -1,7 +1,6 @@
 from elasticsearch_dsl import Search
 from .parser import EESQLParser
-from eesql.plugins.generic import GenericPlugin
-from eesql.plugins import search
+from eesql.plugins import generic, search
 from .ant.eesqlParser import eesqlParser
 
 class EESQLEngine:

@@ -42,6 +42,7 @@ shortcutExpr:
 
 parameter:
     name Equals value # KVParam |
+    LParL value ( LSep value )* RParL # UnnamedList |
     Identifier # SingleParam;
 
 name:
