@@ -1,6 +1,6 @@
 from elasticsearch_dsl import Search
 from .parser import EESQLParser
-from eesql.plugins import generic, search
+from eesql.plugins import generic, search, aggregate
 from .ant.eesqlParser import eesqlParser
 
 class EESQLEngine:
@@ -18,6 +18,8 @@ class EESQLEngine:
             (PT_SEARCH, ["shortcut"], search.SearchShortcutPlugin),
             (PT_SEARCH, ["sort"], search.SortPlugin),
             (PT_SEARCH, ["fields"], search.FieldFilterPlugin),
+            (PT_AGGREGATE, ["fallback"], generic.GenericPlugin),
+            (PT_AGGREGATE, ["shortcut"], aggregate.AggregationShortcutPlugin),
             ]
 
     def __init__(self, host="localhost", index="*"):

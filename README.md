@@ -11,8 +11,11 @@ This project aims to create a query language for ElasticSearch with the followin
 * Exposure of a big amount of ElasticSearch capabilities (compared to Kibana)
 * Extensible by plugin architecture
 * Extension of ElasticSearch capabilities by post processing modules
+* Linear query structure instead of nesting
 * "Everything fits in one line of an EESQL expression"
-* Easy integrated in own projects
+* Easy integration in own projects
+
+Note: EESQL is neither Splunk SPL nor SQL. It's not the idea to "emulate" on of both.
 
 ## EESQL Expressions
 
@@ -42,6 +45,24 @@ The type defines the type of the rule: filter, agg, postproc and output. The fir
 prepended with this keyword for disambiguation reasons. A verb refers to a plugin, which is a piece of code that follows
 some interface conventions. 
 
+A subexpression can be expressed as a shortcut. Each rule type class can define a plugin that handles such shortcut
+expressions. A shortcut expression is prefixed with one of these characters: `:&<>!#+-` (default should be the colon)
+and contains a single quoted or unqouted value. The prefix is passed to the plugin and can be used as behavior modifier.
+Currently, shortcuts are defined as follows:
+
+* Searches: equivalent to a *query\_string* with the value passed to its *query* parameter. The prefix *&* changes the
+  default operator to *AND*.
+* Aggregations:
+  * *:*: equivalent to the *terms* aggregation with the value passed to the *field* parameter.
+  * *#*: equivalent to the *value\_count* aggregation with the value passed to the *field* parameter.
+  * *+*: equivalent to the *sum* aggregation with the value passed to the *field* parameter.
+  * *<* and *>*: equivalent to the *min* and *max* aggregation with the value passed to the *field* parameter.
+
+Shortcut example:
+```
+&"EventID:4624 LogonType:3" | agg :ComputerName | :TargetUserName
+```
+
 Parameter values may be quoted with single (') or double (") quotes. Unquoted values end at the next token separator
 character (spaces and newlines). Some parameter support nested subexpressions, which are placed in parenthesis.
 Examples:
@@ -64,6 +85,12 @@ filter terms field=[value, "multiple words", '"double quoted value"']
 nested path=response.header query=(match response.header.name=content-security-policy)
 ```
 
+Unnamed lists are also supported:
+
+```
+:"EventID:4625" | sort [ComputerName,TargetDomainName,TargetUserName]
+```
+
 ### Sub Expression Types
 
 #### Search Expression
@@ -84,15 +111,18 @@ Filter rules are the same as search rules prefixed with the word *filter*.
 #### Aggregation Expression
 
 Multiple aggregation expressions are applied to each other in order of their appearance. An aggregation expression
-follows the syntax stated above and can end with a name assignment by:
+follows the syntax stated above and can be prefixed with a nesting specification and end with a name assignment:
 
 ```
-... | agg ... as name | ...
+... | [agg <target>] ... [as <name>] | ...
 ```
 
-The name can be used to refer to a particular aggregation from postprocessing and output plugins. Further aggregations
-are nested into the previous aggregation. If the agg keyword is used in a later aggregation, it creates a new
-aggregation instead of the default nesting behavior.
+The target name can be used to refer to a particular aggregation as nesting target from other aggregations or from
+postprocessing and output expressions. Further aggregations are nested into the previous aggregation. If the agg keyword
+is used in a later aggregation after the first one, it must be followed by an already defined aggregation name. The new
+aggregation is then nested into the specified aggregation instead of the default behavior.
+
+An aggregation is named agg*i* if no name is specified. *i* is an incrementing counter starting with 1.
 
 #### Postprocessing and Output Expressions
 
@@ -108,11 +138,29 @@ above:
 
 * search/search modifier plugin: generates a query DSL expression
 * aggregation plugin: adds/nests an aggregation expression to a ElasticSearch Query DSL query.
-* postprocessing plugin: gets an ElasticSearch result tree, changes it and passes it to the next postprocessing module or to
+* postprocessing plugin: gets an ElasticSearch result tree, modifies it and passes it to the next postprocessing module or to
   all following output modules.
 * output plugin: gets an ElasticSearch result tree and outputs it
 
-Parameters are passed as set (switches) and associative arrays (maps) to the plugin.
+Parameters are passed as follows to the plugin:
+
+* *param=value*: as dict element with *param* as key name. If a parameter name appears multiple times, all values are
+  passed as list in the dict element.
+* *flag*: as dict element with a default value (usually True, but can be specified otherwise by plugins)
+* *param=\[value,...\]*: as above, but with a list as value. Multiple occurrences are passed as list inside of the list.
+* *\[value,...\]*: as dict element with the key *unnamed_list*. Multiple unnamed lists are passed as list of lists.
+
+There are two special cases for plugin names:
+
+* *fallback*: if no plugin matches to the verb, this plugin is ivnoked. For searches and aggregations a plugin is
+  invoked that performs a generic transormation.
+* *shortcut*: A specialized shortcut plugin is invoked.
+
+Generally a plugin object is instantiated on usage and the apply method is called as follows for the two known plugin
+types:
+
+* *Normal plugin*: plugin.apply(verb, params)
+* *Shortcut plugin*: plugin.apply(prefix, value)
 
 ## API
 
@@ -130,7 +178,8 @@ the same task.
 ### Post-processing modules
 
 * Aggregation of separate start/stop events into one event that combines both attributes.
-* Find similar events around a specified event class (e.g. similar attacker activity around characteristic login events)
+* Find similar events around a specified event class (e.g. similar attacker activity around characteristic login events
+  or command line invocations)
 
 ### Output modules
 
@@ -154,15 +203,7 @@ Example: output subexpression for intermediate results.
 
 Remove agg, postproc and output keywords from first subexpression with a new type by assignment of verbs to types.
 
-### Complex Aggregation Structures
-
-ElasticSearch supports more complex tree structures of aggregations while EESQL currently supports only linear
-aggregations. The plan is to make such complex aggregation structures accessible via EESQL by intoduction of a grouping
-operator, e.g.:
-
-... | (agg_1.1 | agg_1.2 | (agg_1.2.1 | agg_1.2.2)) | agg_2 | ...
-
 ### Web Frontend
 
 A web application as fronted for EESQL that displays results and offers graphical visualization capabilities by
-additional output plugins.
+additional output plugins. Should be a separate project.

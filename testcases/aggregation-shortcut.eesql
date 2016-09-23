@@ -1,0 +1,1 @@
+&"EventID:4625 LogonType:3" | agg :ComputerName as computer | :TargetUserName as computer_user | <@timestamp | >@timestamp | agg computer #TargetUserName | agg root :TargetUserName | #ComputerName 

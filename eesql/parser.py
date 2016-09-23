@@ -26,16 +26,32 @@ class EESQLParser():
 class EESQLParserListener(eesqlParserListener):
     def __init__(self, engine):
         self.engine = engine
+        self.aggs = AggregationHierarchy()  # aggregation symbol table that contains all aggregation names with aggregation references
         super().__init__()
 
+    # Main rule
     def exitEesql(self, ctx):
         ctx.json = dict()
         for searchExpr in ctx.searchExpr():
             ctx.json.update(searchExpr.json)
+        ctx.json.update(self.aggs.getJSON())
 
     # Expressions
     def exitSearchExpr(self, ctx):
         ctx.json = ctx.genericExpr().json
+
+    def exitAggregationExpr(self, ctx):
+        try:
+            aggId = ctx.aggId.text
+        except:
+            aggId = None
+
+        try:
+            targetId = ctx.targetId.text
+        except:
+            targetId = None
+
+        self.aggs.add(aggId, ctx.genericExpr().json, targetId )
 
     def exitGeneric(self, ctx):
         type = self.engine.getPluginTypeForContext(ctx.parentCtx)
@@ -81,3 +97,74 @@ class EESQLParserListener(eesqlParserListener):
         ctx.text = list()
         for value in ctx.value():
             ctx.text.append(value.text)
+
+class AggregationHierarchy:
+    """Class used for building an aggregation hierarchy"""
+    def __init__(self):
+        self.aggId = 0          # Initial value of counter for automatic aggregation naming - 1
+        self.prev = None        # pointer to the previous aggregation where next one is nested into when not specified differently with 'agg <id>' statement
+        self.aggs = dict()      # the aggregation hierarchy is built into this. For technical reasons (references to aggregations) each agg located at root level is added as list element and the list is merged finally.
+        self.aggNames = dict()  # symbol table: name -> aggregation object (JSON/dict)
+
+    def add(self, name, baseagg, target):
+        """
+        Add aggregation to hierarchy with specified name and nested into given target aggregation.
+
+        If name is not specified, a default name 'agg<count>' is generated.
+        If target is not specified, the aggregation is nested into the last aggregation or as first root aggregation.
+        The trget name 'root' has a special meaning and adds aggregation to the top level of the hierarchy.
+        """
+        if not name:                # automatically generate name with counter if 'as' statement is missing
+            name = "agg%d" % (self.nextAggId())
+        agg = { name: baseagg }
+        self.addName(name, baseagg)
+
+        if self.prev == None or type(target) == str and target == "root":    # first aggregation expression or explicit specification of root level in hierarchy
+            self.aggs.update(agg)
+        else:
+            if type(target) == str:           # target is given
+                self.prev = self.getAgg(target)
+            if "aggs" not in self.prev:         # add subaggregation key if not present
+                self.prev["aggs"] = dict()
+            self.prev["aggs"].update(agg)       # as for the root tag the subaggregations are added as list elements to keep the reference from the symbol table alive
+        self.prev = baseagg
+
+    def getJSON(self):
+        """Finalize aggregation hierarchy and return dict that can be merged into a query and converted into JSON."""
+        if len(self.aggs) > 0:
+            return { "aggs": self.aggs }
+        else:
+            return {}
+
+    def nextAggId(self):
+        self.aggId += 1
+        return self.aggId
+
+    def addName(self, name, agg):
+        """Add aggregation name to symbol table"""
+        if name in self.aggNames:
+            raise self.AlreadyExistsError(name)
+        self.aggNames[name] = agg
+
+    def getAgg(self, name):
+        """Retrieve aggregation from symbol table"""
+        try:
+            return self.aggNames[name]
+        except KeyError:
+            raise self.NotFoundException(name)
+
+    class AlreadyExistsError(ValueError):
+        """Is raised when name that already exists should be added"""
+        def __init__(self, name):
+            self.name = name
+
+        def __str__(self):
+            return "Name '%s' already exists" % (self.name)
+
+    class NotFoundException(ValueError):
+        """Is raised when name is not found in symbol table"""
+        def __init__(self, name):
+            self.name = name
+
+        def __str__(self):
+            return "Name '%s' not found" % (self.name)
