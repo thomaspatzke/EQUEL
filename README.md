@@ -199,6 +199,18 @@ actions performed in the spawned shells.
 
 Example: output subexpression for intermediate results.
 
+### Adding Useful Operators to Searches
+
+At the end of a search:
+
+* groupby
+
+Connecting searches:
+
+* and
+* or
+* not
+
 ### Remove Subexpression Type Declarations
 
 Remove agg, postproc and output keywords from first subexpression with a new type by assignment of verbs to types.

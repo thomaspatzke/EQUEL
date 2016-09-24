@@ -6,7 +6,7 @@ class GenericSearchPlugin(GenericPlugin):
     name = "Generic Search Plugin"
     description = "Generic EESQL to JSON conversion with wrapping into query attribute"
 
-    def apply(self, verb, params):
+    def apply(self, verb, params, aggs):
         return { "query": super().apply(verb, params) }
 
 class SearchShortcutPlugin(BaseShortcutPlugin):
@@ -18,7 +18,7 @@ class SearchShortcutPlugin(BaseShortcutPlugin):
     name = "Search shortcut plugin"
     description = "Convert value into query_string query"
 
-    def apply(self, prefix, value):
+    def apply(self, prefix, value, aggs):
         res = { "query_string": { "query": value } }
         if prefix == "&":
             res["query_string"]["default_operator"] = "AND"
@@ -44,7 +44,7 @@ class SortPlugin(BasePlugin):
         else:
             self.sortfields.append(field)
 
-    def apply(self, verb, params):
+    def apply(self, verb, params, aggs):
         try:
             fields = params["unnamed_list"]
         except KeyError:
@@ -65,7 +65,7 @@ class FieldFilterPlugin(BasePlugin):
     name = "Filter fields from search result plugin"
     description = "Filters fields from search result documents"
 
-    def apply(self, verb, params):
+    def apply(self, verb, params, aggs):
         try:
             fields = params["unnamed_list"]
         except KeyError:

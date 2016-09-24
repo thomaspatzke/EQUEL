@@ -13,7 +13,7 @@ class BasePlugin:
         """Constructor"""
         pass
 
-    def apply(verb, params):
+    def apply(self, verb, params, aggs):
         """Called every time the plugin is used and should return a dict"""
         pass
 
@@ -26,7 +26,7 @@ class BaseShortcutPlugin:
         """Constructor"""
         pass
 
-    def apply(verb, prefix, value):
+    def apply(verb, prefix, value, aggs):
         """Called every time the plugin is used and should return a dict"""
         pass
 
@@ -35,5 +35,5 @@ class GenericPlugin(BasePlugin):
     name = "Generic Plugin"
     description = "Generic EESQL to JSON conversion"
 
-    def apply(self, verb, params):
+    def apply(self, verb, params, aggs):
         return { verb: params.toJSON() }

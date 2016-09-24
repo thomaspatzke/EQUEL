@@ -20,6 +20,7 @@ class EESQLEngine:
             (PT_SEARCH, ["fields"], search.FieldFilterPlugin),
             (PT_AGGREGATE, ["fallback"], generic.GenericPlugin),
             (PT_AGGREGATE, ["shortcut"], aggregate.AggregationShortcutPlugin),
+            (PT_AGGREGATE, ["groupby", "add_sum", "add_min", "add_max", "valuecount"], aggregate.AggregationKeywordsPlugin),
             ]
 
     def __init__(self, host="localhost", index="*"):

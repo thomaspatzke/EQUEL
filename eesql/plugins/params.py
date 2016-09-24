@@ -28,9 +28,15 @@ class ParameterList(list):
     def __init__(self, params):
         """Takes a list of parameter parsing contexts and adds them to collection"""
         self.paramnames = list()
+        self.flags = list()
         for param in params:
             self.append(param.param)
             self.paramnames.append(param.param.key)
+
+    def append(self, param):
+        super().append(param)
+        if param.type == param.PARAM_FLAG:
+            self.flags.append(param.key)
 
     def __contains__(self, param):
         return paramname in self.paramnames

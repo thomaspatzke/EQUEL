@@ -51,21 +51,22 @@ class EESQLParserListener(eesqlParserListener):
         except:
             targetId = None
 
-        self.aggs.add(aggId, ctx.genericExpr().json, targetId )
+        if ctx.genericExpr().json:
+            self.aggs.add(aggId, ctx.genericExpr().json, targetId)
 
     def exitGeneric(self, ctx):
         type = self.engine.getPluginTypeForContext(ctx.parentCtx)
         verb = ctx.verb().text
         params = ParameterList(ctx.parameter())
         plugin = self.engine.resolvePlugin(type, verb)
-        ctx.json = plugin.apply(verb, params)
+        ctx.json = plugin.apply(verb, params, self.aggs)
 
     def exitShortcut(self, ctx):
         type = self.engine.getPluginTypeForContext(ctx.parentCtx)
         plugin = self.engine.resolveShortcutPlugin(type)
         prefix = ctx.shortcutExpr().PrefixChar().getText()
         value = ctx.shortcutExpr().value().text
-        ctx.json = plugin.apply(prefix, value)
+        ctx.json = plugin.apply(prefix, value, self.aggs)
 
     def exitVerb(self, ctx):
         ctx.text = ctx.Identifier().getText()
@@ -106,7 +107,7 @@ class AggregationHierarchy:
         self.aggs = dict()      # the aggregation hierarchy is built into this. For technical reasons (references to aggregations) each agg located at root level is added as list element and the list is merged finally.
         self.aggNames = dict()  # symbol table: name -> aggregation object (JSON/dict)
 
-    def add(self, name, baseagg, target):
+    def add(self, name, baseagg, target=None):
         """
         Add aggregation to hierarchy with specified name and nested into given target aggregation.
 
