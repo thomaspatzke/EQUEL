@@ -1,0 +1,1 @@
+&"EventID:4625 LogonType:3" | agg groupby ComputerName TargetUserName | add_min @timestamp | add_max @timestamp

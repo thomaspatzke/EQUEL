@@ -4,16 +4,14 @@ from eesql.ant.eesqlLexer import eesqlLexer
 from eesql.ant.eesqlParser import eesqlParser
 from eesql.ant.eesqlParserListener import eesqlParserListener
 from eesql.plugins.params import Parameter, ParameterList
-import json
 
 class EESQLParser():
     """Parser builds elasticsearch_dsl Search object from EESQL query expression"""
-    def __init__(self, engine, search=Search()):
+    def __init__(self, engine):
         """Initialize EESQL parser"""
-        self.search = search
         self.engine = engine
 
-    def parse(self, eesql, **kwargs):
+    def parse(self, eesql):
         lexer = eesqlLexer(eesql)
         tokenstream = CommonTokenStream(lexer)
         parser = eesqlParser(tokenstream)
@@ -21,20 +19,24 @@ class EESQLParser():
         walker = ParseTreeWalker()
         listener = EESQLParserListener(self.engine)
         walker.walk(listener, parsetree)
-        return json.dumps(parsetree.json, **kwargs)
+        return parsetree
 
 class EESQLParserListener(eesqlParserListener):
     def __init__(self, engine):
         self.engine = engine
         self.aggs = AggregationHierarchy()  # aggregation symbol table that contains all aggregation names with aggregation references
+        self.postproc = PostprocessingChain()
+        self.output = Outputs()
         super().__init__()
 
     # Main rule
     def exitEesql(self, ctx):
-        ctx.json = dict()
+        ctx.query = dict()
         for searchExpr in ctx.searchExpr():
-            ctx.json.update(searchExpr.json)
-        ctx.json.update(self.aggs.getJSON())
+            ctx.query.update(searchExpr.json)
+        ctx.query.update(self.aggs.getJSON())
+        ctx.postproc = self.postproc
+        ctx.output = self.output
 
     # Expressions
     def exitSearchExpr(self, ctx):
@@ -53,6 +55,18 @@ class EESQLParserListener(eesqlParserListener):
 
         if ctx.genericExpr().json:
             self.aggs.add(aggId, ctx.genericExpr().json, targetId)
+
+    def exitPostprocExpr(self, ctx):
+        pp = ctx.genericExpr().json
+        self.postproc.append(pp)
+
+    def exitOutputExpr(self, ctx):
+        try:
+            outId = ctx.outId.text
+        except:
+            outId = None
+        out = ctx.genericExpr().json
+        self.output.add(out, outId)
 
     def exitGeneric(self, ctx):
         type = self.engine.getPluginTypeForContext(ctx.parentCtx)
@@ -169,3 +183,16 @@ class AggregationHierarchy:
 
         def __str__(self):
             return "Name '%s' not found" % (self.name)
+
+class PostprocessingChain(list):
+    pass
+
+class Outputs(dict):
+    def __init__(self):
+        self.autocount = 1
+
+    def add(self, output, name=None):
+        if name == None:
+            name = "output_%d" % (self.autocount)
+            self.autocount += 1
+        self[name] = output

@@ -61,19 +61,34 @@ class SortPlugin(BasePlugin):
         return { "sort": self.sortfields }
 
 class FieldFilterPlugin(BasePlugin):
-    """Filter fields from search result"""
+    """
+    Filter fields from search result. Parameters:
+    [field,...]: include these fields
+    exclude=[field,...]: exclude these fields
+    """
     name = "Filter fields from search result plugin"
     description = "Filters fields from search result documents"
 
     def apply(self, verb, params, aggs):
         try:
-            fields = params["unnamed_list"]
+            include = params["unnamed_list"]
         except KeyError:
-            raise EESQLPluginException("Expression 'filter' requires list of fields")
+            include = None
 
-        if len(fields) == 0:
-            raise EESQLPluginException("List of fields of sort expression must not be empty")
-        elif type(fields[0]) == list:
-            raise EESQLPluginException("Only one list of fields in sort expression is allowed")
+        try:
+            exclude = params["exclude"]
+        except KeyError:
+            exclude = None
 
-        return { "_source": fields }
+        if include and len(include) > 0 and type(include[0]) == list or exclude and len(exclude) > 0 and type(exclude[0]) == list:
+            raise EESQLPluginException("Only one list of fields in fields expression is allowed")
+
+        if not include and not exclude:
+            return {}
+
+        filters = dict()
+        if include:
+            filters["include"] = include
+        if exclude:
+            filters["exclude"] = exclude
+        return { "_source": filters }

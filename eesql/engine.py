@@ -1,7 +1,9 @@
-from elasticsearch_dsl import Search
+from elasticsearch import Elasticsearch
 from .parser import EESQLParser
 from eesql.plugins import generic, search, aggregate
 from .ant.eesqlParser import eesqlParser
+from antlr4 import InputStream, FileStream
+import json
 
 class EESQLEngine:
     """Main class for EESQL usage"""
@@ -23,21 +25,22 @@ class EESQLEngine:
             (PT_AGGREGATE, ["groupby", "add_sum", "add_min", "add_max", "valuecount"], aggregate.AggregationKeywordsPlugin),
             ]
 
-    def __init__(self, host="localhost", index="*"):
+    def __init__(self, host="localhost", index=""):
         """Initializes EESQL engine"""
         self.host = host
         self.index = index
         self.plugins = [dict(), dict(), dict(), dict()]
         self.registerDefaultPlugins()
 
-    def initSearch(self):
-        """Instantiates base elasticsearch_dsl Search object"""
-        return Search(using=self.host).index(self.index)
-
-    def parseEESQL(self, eesql, **kwargs):
+    def parseEESQL(self, eesql, inputclass=InputStream, **kwargs):
         """Parse EESQL expression and return elasticsearch_dsl Search object according to the query expression"""
-        parser = EESQLParser(self, search=self.initSearch())
-        return parser.parse(eesql, **kwargs)
+        inp = inputclass(eesql)
+        parser = EESQLParser(self)
+        parsetree = parser.parse(inp)
+        return EESQLRequest(parsetree, self)
+
+    def parseEESQLFile(self, filename, **kwargs):
+        return self.parseEESQL(filename, FileStream, **kwargs)
 
     def registerPlugin(self, plugintype, verbs, cls):
         """
@@ -102,3 +105,25 @@ class EESQLEngine:
             return self.PT_OUTPUT
         else:
             raise TypeError("Expression context type expected!")
+
+class EESQLRequest:
+    def __init__(self, parsetree, engine):
+        self.query = parsetree.query
+        self.postproc = parsetree.postproc
+        self.output = parsetree.output
+        self.engine = engine
+
+    def jsonQuery(self, **kwargs):
+        return json.dumps(self.query, **kwargs)
+
+    def execute(self, *args, **kwargs):
+        """Instantiates base elasticsearch_dsl Search object"""
+        es = Elasticsearch(hosts=self.engine.host)
+        res = es.search(index=self.engine.index, body=self.jsonQuery(), *args, **kwargs)
+        return EESQLResult(res)
+
+class EESQLResult:
+    """Result of an EESQL query"""
+    def __init__(self, result):
+        """Creates a result object from a result body"""
+        self.result = result

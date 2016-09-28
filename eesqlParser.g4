@@ -35,7 +35,7 @@ postprocExpr:
     genericExpr ;
 
 outputExpr:
-    genericExpr ;
+    genericExpr ( AS outId=Identifier )? ;
 
 shortcutExpr:
     PrefixChar value ;

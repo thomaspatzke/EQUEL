@@ -6,7 +6,7 @@ from io import StringIO
 def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\24")
-        buf.write("\u008f\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\u0092\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\3\2")
         buf.write("\3\2\3\2\7\2\36\n\2\f\2\16\2!\13\2\3\2\3\2\3\2\3\2\3\2")
         buf.write("\7\2(\n\2\f\2\16\2+\13\2\5\2-\n\2\3\2\3\2\3\2\3\2\3\2")
@@ -14,45 +14,47 @@ def serializedATN():
         buf.write("\3\2\7\2@\n\2\f\2\16\2C\13\2\5\2E\n\2\3\3\3\3\3\4\3\4")
         buf.write("\7\4K\n\4\f\4\16\4N\13\4\3\4\5\4Q\n\4\3\5\3\5\3\6\3\6")
         buf.write("\3\7\3\7\5\7Y\n\7\3\7\3\7\3\7\5\7^\n\7\3\b\3\b\3\t\3\t")
-        buf.write("\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\7")
-        buf.write("\13o\n\13\f\13\16\13r\13\13\3\13\3\13\3\13\5\13w\n\13")
-        buf.write("\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\7")
-        buf.write("\r\u0086\n\r\f\r\16\r\u0089\13\r\3\r\3\r\5\r\u008d\n\r")
-        buf.write("\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30\2\2\u0095\2")
-        buf.write("\32\3\2\2\2\4F\3\2\2\2\6P\3\2\2\2\bR\3\2\2\2\nT\3\2\2")
-        buf.write("\2\fX\3\2\2\2\16_\3\2\2\2\20a\3\2\2\2\22c\3\2\2\2\24v")
-        buf.write("\3\2\2\2\26x\3\2\2\2\30\u008c\3\2\2\2\32\37\5\b\5\2\33")
-        buf.write("\34\7\7\2\2\34\36\5\b\5\2\35\33\3\2\2\2\36!\3\2\2\2\37")
-        buf.write("\35\3\2\2\2\37 \3\2\2\2 ,\3\2\2\2!\37\3\2\2\2\"#\7\7\2")
-        buf.write("\2#$\7\4\2\2$)\5\f\7\2%&\7\7\2\2&(\5\f\7\2\'%\3\2\2\2")
-        buf.write("(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*-\3\2\2\2+)\3\2\2\2,\"")
-        buf.write("\3\2\2\2,-\3\2\2\2-8\3\2\2\2./\7\7\2\2/\60\7\5\2\2\60")
-        buf.write("\65\5\16\b\2\61\62\7\7\2\2\62\64\5\16\b\2\63\61\3\2\2")
-        buf.write("\2\64\67\3\2\2\2\65\63\3\2\2\2\65\66\3\2\2\2\669\3\2\2")
-        buf.write("\2\67\65\3\2\2\28.\3\2\2\289\3\2\2\29D\3\2\2\2:;\7\7\2")
-        buf.write("\2;<\7\6\2\2<A\5\20\t\2=>\7\7\2\2>@\5\20\t\2?=\3\2\2\2")
-        buf.write("@C\3\2\2\2A?\3\2\2\2AB\3\2\2\2BE\3\2\2\2CA\3\2\2\2D:\3")
-        buf.write("\2\2\2DE\3\2\2\2E\3\3\2\2\2FG\7\13\2\2G\5\3\2\2\2HL\5")
-        buf.write("\4\3\2IK\5\24\13\2JI\3\2\2\2KN\3\2\2\2LJ\3\2\2\2LM\3\2")
-        buf.write("\2\2MQ\3\2\2\2NL\3\2\2\2OQ\5\22\n\2PH\3\2\2\2PO\3\2\2")
-        buf.write("\2Q\7\3\2\2\2RS\5\6\4\2S\t\3\2\2\2TU\5\b\5\2U\13\3\2\2")
-        buf.write("\2VW\7\4\2\2WY\7\13\2\2XV\3\2\2\2XY\3\2\2\2YZ\3\2\2\2")
-        buf.write("Z]\5\6\4\2[\\\7\3\2\2\\^\7\13\2\2][\3\2\2\2]^\3\2\2\2")
-        buf.write("^\r\3\2\2\2_`\5\6\4\2`\17\3\2\2\2ab\5\6\4\2b\21\3\2\2")
-        buf.write("\2cd\7\n\2\2de\5\30\r\2e\23\3\2\2\2fg\5\26\f\2gh\7\t\2")
-        buf.write("\2hi\5\30\r\2iw\3\2\2\2jk\7\17\2\2kp\5\30\r\2lm\7\20\2")
-        buf.write("\2mo\5\30\r\2nl\3\2\2\2or\3\2\2\2pn\3\2\2\2pq\3\2\2\2")
-        buf.write("qs\3\2\2\2rp\3\2\2\2st\7\21\2\2tw\3\2\2\2uw\7\13\2\2v")
-        buf.write("f\3\2\2\2vj\3\2\2\2vu\3\2\2\2w\25\3\2\2\2xy\7\13\2\2y")
-        buf.write("\27\3\2\2\2z\u008d\7\24\2\2{\u008d\7\22\2\2|\u008d\7\23")
-        buf.write("\2\2}~\7\16\2\2~\177\5\b\5\2\177\u0080\7\b\2\2\u0080\u008d")
-        buf.write("\3\2\2\2\u0081\u0082\7\17\2\2\u0082\u0087\5\30\r\2\u0083")
-        buf.write("\u0084\7\20\2\2\u0084\u0086\5\30\r\2\u0085\u0083\3\2\2")
-        buf.write("\2\u0086\u0089\3\2\2\2\u0087\u0085\3\2\2\2\u0087\u0088")
-        buf.write("\3\2\2\2\u0088\u008a\3\2\2\2\u0089\u0087\3\2\2\2\u008a")
-        buf.write("\u008b\7\21\2\2\u008b\u008d\3\2\2\2\u008cz\3\2\2\2\u008c")
-        buf.write("{\3\2\2\2\u008c|\3\2\2\2\u008c}\3\2\2\2\u008c\u0081\3")
-        buf.write("\2\2\2\u008d\31\3\2\2\2\21\37),\658ADLPX]pv\u0087\u008c")
+        buf.write("\3\t\5\te\n\t\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3\13")
+        buf.write("\3\13\3\13\7\13r\n\13\f\13\16\13u\13\13\3\13\3\13\3\13")
+        buf.write("\5\13z\n\13\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3")
+        buf.write("\r\3\r\3\r\7\r\u0089\n\r\f\r\16\r\u008c\13\r\3\r\3\r\5")
+        buf.write("\r\u0090\n\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30")
+        buf.write("\2\2\u0099\2\32\3\2\2\2\4F\3\2\2\2\6P\3\2\2\2\bR\3\2\2")
+        buf.write("\2\nT\3\2\2\2\fX\3\2\2\2\16_\3\2\2\2\20a\3\2\2\2\22f\3")
+        buf.write("\2\2\2\24y\3\2\2\2\26{\3\2\2\2\30\u008f\3\2\2\2\32\37")
+        buf.write("\5\b\5\2\33\34\7\7\2\2\34\36\5\b\5\2\35\33\3\2\2\2\36")
+        buf.write("!\3\2\2\2\37\35\3\2\2\2\37 \3\2\2\2 ,\3\2\2\2!\37\3\2")
+        buf.write("\2\2\"#\7\7\2\2#$\7\4\2\2$)\5\f\7\2%&\7\7\2\2&(\5\f\7")
+        buf.write("\2\'%\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*-\3\2\2\2")
+        buf.write("+)\3\2\2\2,\"\3\2\2\2,-\3\2\2\2-8\3\2\2\2./\7\7\2\2/\60")
+        buf.write("\7\5\2\2\60\65\5\16\b\2\61\62\7\7\2\2\62\64\5\16\b\2\63")
+        buf.write("\61\3\2\2\2\64\67\3\2\2\2\65\63\3\2\2\2\65\66\3\2\2\2")
+        buf.write("\669\3\2\2\2\67\65\3\2\2\28.\3\2\2\289\3\2\2\29D\3\2\2")
+        buf.write("\2:;\7\7\2\2;<\7\6\2\2<A\5\20\t\2=>\7\7\2\2>@\5\20\t\2")
+        buf.write("?=\3\2\2\2@C\3\2\2\2A?\3\2\2\2AB\3\2\2\2BE\3\2\2\2CA\3")
+        buf.write("\2\2\2D:\3\2\2\2DE\3\2\2\2E\3\3\2\2\2FG\7\13\2\2G\5\3")
+        buf.write("\2\2\2HL\5\4\3\2IK\5\24\13\2JI\3\2\2\2KN\3\2\2\2LJ\3\2")
+        buf.write("\2\2LM\3\2\2\2MQ\3\2\2\2NL\3\2\2\2OQ\5\22\n\2PH\3\2\2")
+        buf.write("\2PO\3\2\2\2Q\7\3\2\2\2RS\5\6\4\2S\t\3\2\2\2TU\5\b\5\2")
+        buf.write("U\13\3\2\2\2VW\7\4\2\2WY\7\13\2\2XV\3\2\2\2XY\3\2\2\2")
+        buf.write("YZ\3\2\2\2Z]\5\6\4\2[\\\7\3\2\2\\^\7\13\2\2][\3\2\2\2")
+        buf.write("]^\3\2\2\2^\r\3\2\2\2_`\5\6\4\2`\17\3\2\2\2ad\5\6\4\2")
+        buf.write("bc\7\3\2\2ce\7\13\2\2db\3\2\2\2de\3\2\2\2e\21\3\2\2\2")
+        buf.write("fg\7\n\2\2gh\5\30\r\2h\23\3\2\2\2ij\5\26\f\2jk\7\t\2\2")
+        buf.write("kl\5\30\r\2lz\3\2\2\2mn\7\17\2\2ns\5\30\r\2op\7\20\2\2")
+        buf.write("pr\5\30\r\2qo\3\2\2\2ru\3\2\2\2sq\3\2\2\2st\3\2\2\2tv")
+        buf.write("\3\2\2\2us\3\2\2\2vw\7\21\2\2wz\3\2\2\2xz\7\13\2\2yi\3")
+        buf.write("\2\2\2ym\3\2\2\2yx\3\2\2\2z\25\3\2\2\2{|\7\13\2\2|\27")
+        buf.write("\3\2\2\2}\u0090\7\24\2\2~\u0090\7\22\2\2\177\u0090\7\23")
+        buf.write("\2\2\u0080\u0081\7\16\2\2\u0081\u0082\5\b\5\2\u0082\u0083")
+        buf.write("\7\b\2\2\u0083\u0090\3\2\2\2\u0084\u0085\7\17\2\2\u0085")
+        buf.write("\u008a\5\30\r\2\u0086\u0087\7\20\2\2\u0087\u0089\5\30")
+        buf.write("\r\2\u0088\u0086\3\2\2\2\u0089\u008c\3\2\2\2\u008a\u0088")
+        buf.write("\3\2\2\2\u008a\u008b\3\2\2\2\u008b\u008d\3\2\2\2\u008c")
+        buf.write("\u008a\3\2\2\2\u008d\u008e\7\21\2\2\u008e\u0090\3\2\2")
+        buf.write("\2\u008f}\3\2\2\2\u008f~\3\2\2\2\u008f\177\3\2\2\2\u008f")
+        buf.write("\u0080\3\2\2\2\u008f\u0084\3\2\2\2\u0090\31\3\2\2\2\22")
+        buf.write("\37),\658ADLPX]dsy\u008a\u008f")
         return buf.getvalue()
 
 
@@ -671,10 +673,17 @@ class eesqlParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+            self.outId = None # Token
 
         def genericExpr(self):
             return self.getTypedRuleContext(eesqlParser.GenericExprContext,0)
 
+
+        def AS(self):
+            return self.getToken(eesqlParser.AS, 0)
+
+        def Identifier(self):
+            return self.getToken(eesqlParser.Identifier, 0)
 
         def getRuleIndex(self):
             return eesqlParser.RULE_outputExpr
@@ -700,10 +709,20 @@ class eesqlParser ( Parser ):
 
         localctx = eesqlParser.OutputExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_outputExpr)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 95
             self.genericExpr()
+            self.state = 98
+            _la = self._input.LA(1)
+            if _la==eesqlParser.AS:
+                self.state = 96
+                self.match(eesqlParser.AS)
+                self.state = 97
+                localctx.outId = self.match(eesqlParser.Identifier)
+
+
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -751,9 +770,9 @@ class eesqlParser ( Parser ):
         self.enterRule(localctx, 16, self.RULE_shortcutExpr)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 97
+            self.state = 100
             self.match(eesqlParser.PrefixChar)
-            self.state = 98
+            self.state = 101
             self.value()
         except RecognitionException as re:
             localctx.exception = re
@@ -877,46 +896,46 @@ class eesqlParser ( Parser ):
         self.enterRule(localctx, 18, self.RULE_parameter)
         self._la = 0 # Token type
         try:
-            self.state = 116
-            la_ = self._interp.adaptivePredict(self._input,12,self._ctx)
+            self.state = 119
+            la_ = self._interp.adaptivePredict(self._input,13,self._ctx)
             if la_ == 1:
                 localctx = eesqlParser.KVParamContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 100
+                self.state = 103
                 self.name()
-                self.state = 101
+                self.state = 104
                 self.match(eesqlParser.Equals)
-                self.state = 102
+                self.state = 105
                 self.value()
                 pass
 
             elif la_ == 2:
                 localctx = eesqlParser.UnnamedListContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 104
+                self.state = 107
                 self.match(eesqlParser.LParL)
-                self.state = 105
+                self.state = 108
                 self.value()
-                self.state = 110
+                self.state = 113
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while _la==eesqlParser.LSep:
-                    self.state = 106
+                    self.state = 109
                     self.match(eesqlParser.LSep)
-                    self.state = 107
+                    self.state = 110
                     self.value()
-                    self.state = 112
+                    self.state = 115
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
 
-                self.state = 113
+                self.state = 116
                 self.match(eesqlParser.RParL)
                 pass
 
             elif la_ == 3:
                 localctx = eesqlParser.SingleParamContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
-                self.state = 115
+                self.state = 118
                 self.match(eesqlParser.Identifier)
                 pass
 
@@ -964,7 +983,7 @@ class eesqlParser ( Parser ):
         self.enterRule(localctx, 20, self.RULE_name)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 118
+            self.state = 121
             self.match(eesqlParser.Identifier)
         except RecognitionException as re:
             localctx.exception = re
@@ -1135,56 +1154,56 @@ class eesqlParser ( Parser ):
         self.enterRule(localctx, 22, self.RULE_value)
         self._la = 0 # Token type
         try:
-            self.state = 138
+            self.state = 141
             token = self._input.LA(1)
             if token in [eesqlParser.UnquotedValue]:
                 localctx = eesqlParser.SimpleUQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 120
+                self.state = 123
                 self.match(eesqlParser.UnquotedValue)
 
             elif token in [eesqlParser.SingleQuotedValue]:
                 localctx = eesqlParser.SimpleSQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 121
+                self.state = 124
                 self.match(eesqlParser.SingleQuotedValue)
 
             elif token in [eesqlParser.DoubleQuotedValue]:
                 localctx = eesqlParser.SimpleDQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
-                self.state = 122
+                self.state = 125
                 self.match(eesqlParser.DoubleQuotedValue)
 
             elif token in [eesqlParser.LParS]:
                 localctx = eesqlParser.NestedSearchContext(self, localctx)
                 self.enterOuterAlt(localctx, 4)
-                self.state = 123
+                self.state = 126
                 self.match(eesqlParser.LParS)
-                self.state = 124
+                self.state = 127
                 self.searchExpr()
-                self.state = 125
+                self.state = 128
                 self.match(eesqlParser.RParS)
 
             elif token in [eesqlParser.LParL]:
                 localctx = eesqlParser.ValueListContext(self, localctx)
                 self.enterOuterAlt(localctx, 5)
-                self.state = 127
+                self.state = 130
                 self.match(eesqlParser.LParL)
-                self.state = 128
+                self.state = 131
                 self.value()
-                self.state = 133
+                self.state = 136
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while _la==eesqlParser.LSep:
-                    self.state = 129
+                    self.state = 132
                     self.match(eesqlParser.LSep)
-                    self.state = 130
+                    self.state = 133
                     self.value()
-                    self.state = 135
+                    self.state = 138
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
 
-                self.state = 136
+                self.state = 139
                 self.match(eesqlParser.RParL)
 
             else:
