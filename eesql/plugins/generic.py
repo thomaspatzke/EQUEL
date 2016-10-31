@@ -14,7 +14,13 @@ class BasePlugin:
         pass
 
     def apply(self, verb, params, aggs):
-        """Called every time the plugin is used and should return a dict"""
+        """
+        Called every time the plugin is used and should return the expected return a dict that is merged into the request for search and aggregation plugins.
+        The following parameters are passed:
+        * the verb from the EESQL expression
+        * a dict of parameters
+        * the current aggregations object
+        """
         pass
 
 class BaseShortcutPlugin:

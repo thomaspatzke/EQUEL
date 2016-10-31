@@ -39,7 +39,7 @@ class ParameterList(list):
             self.flags.append(param.key)
 
     def __contains__(self, param):
-        return paramname in self.paramnames
+        return param in self.paramnames
 
     def __getitem__(self, paramname):
         if type(paramname) != str:

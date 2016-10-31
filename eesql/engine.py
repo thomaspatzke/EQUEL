@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 from .parser import EESQLParser
-from eesql.plugins import generic, search, aggregate
+from eesql.plugins import generic, search, aggregate, output
 from .ant.eesqlParser import eesqlParser
 from antlr4 import InputStream, FileStream
 import json
@@ -23,7 +23,10 @@ class EESQLEngine:
             (PT_AGGREGATE, ["fallback"], generic.GenericPlugin),
             (PT_AGGREGATE, ["shortcut"], aggregate.AggregationShortcutPlugin),
             (PT_AGGREGATE, ["groupby", "add_sum", "add_min", "add_max", "valuecount"], aggregate.AggregationKeywordsPlugin),
+            (PT_OUTPUT, ["plain"], output.BaseOutputPlugin),
+            (PT_OUTPUT, ["text"], output.TextOutputPlugin),
             ]
+    defaultOutput = output.BaseOutputPlugin
 
     def __init__(self, host="localhost", index=""):
         """Initializes EESQL engine"""
@@ -111,6 +114,8 @@ class EESQLRequest:
         self.query = parsetree.query
         self.postproc = parsetree.postproc
         self.output = parsetree.output
+        if self.output == None:
+            self.output = { "default": engine.defaultOutput() }
         self.engine = engine
 
     def jsonQuery(self, **kwargs):
@@ -119,11 +124,19 @@ class EESQLRequest:
     def execute(self, *args, **kwargs):
         """Instantiates base elasticsearch_dsl Search object"""
         es = Elasticsearch(hosts=self.engine.host)
-        res = es.search(index=self.engine.index, body=self.jsonQuery(), *args, **kwargs)
-        return EESQLResult(res)
+        res = EESQLResult(es.search(index=self.engine.index, body=self.jsonQuery(), *args, **kwargs))
+        for outputname in self.output:
+            outputplugin = self.output[outputname]
+            res.addOutput(outputname, outputplugin.render(res))
+        return res
 
 class EESQLResult:
     """Result of an EESQL query"""
     def __init__(self, result):
         """Creates a result object from a result body"""
         self.result = result
+        self.outputs = dict()
+
+    def addOutput(self, name, output):
+        self.outputs[name] = output
+

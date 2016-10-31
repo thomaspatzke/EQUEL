@@ -73,7 +73,7 @@ class EESQLParserListener(eesqlParserListener):
         verb = ctx.verb().text
         params = ParameterList(ctx.parameter())
         plugin = self.engine.resolvePlugin(type, verb)
-        ctx.json = plugin.apply(verb, params, self.aggs)
+        ctx.json = plugin.apply(verb, params, self.aggs)    # TODO: name 'json' does not match, as it contains dicts or output plugin objects
 
     def exitShortcut(self, ctx):
         type = self.engine.getPluginTypeForContext(ctx.parentCtx)
