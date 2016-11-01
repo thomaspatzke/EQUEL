@@ -17,6 +17,9 @@ class Parameter:
         else:
             self.type = self.PARAM_KV
 
+    def __str__(self):
+        return "(%s: %s)" % (self.key, self.value)
+
     def toJSON(self, flagdefault=True):
         if self.type == self.PARAM_FLAG:
             return { self.key: flagdefault }
@@ -56,6 +59,12 @@ class ParameterList(list):
             return lists[0]
         else:                   # else return all values as list
             return lists
+
+    def __str__(self):
+        res = ""
+        for param in self:
+            res += str(param) + ", "
+        return res[:-2]
 
     def toJSON(self, flagdefault=True):
         """Generate JSON encoded data structure from parameters stored in collection."""

@@ -93,7 +93,7 @@ class EESQLParserListener(eesqlParserListener):
         ctx.param = Parameter(None, list(map(lambda c: c.text, ctx.value())))
 
     def exitSingleParam(self, ctx):
-        ctx.param = Parameter(ctx.Identifier().getText())
+        ctx.param = Parameter(ctx.Identifier().getText(), True)
 
     ### Values
     def exitSimpleUQValue(self, ctx):

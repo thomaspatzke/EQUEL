@@ -1,6 +1,9 @@
 # Output Plugins
 from .generic import EESQLPluginException
 import json
+import re
+
+reRemoveIndices = re.compile('\[\d+\]')
 
 class BaseOutputPlugin:
     """Base class for output plugins"""
@@ -43,6 +46,7 @@ class TextOutputPlugin(BaseOutputPlugin):
     * color (flag): Colorize output, highlight captions and main value with terminal escape sequences.
     * mainfield: Name of the main field where the main value is pulled from. If not given, no mainvalue is shown.
     * fields: List of fields to display. If not given, all fields are displayed.
+    * exclude: List of fields not to display.
     * maxmainlen: Maximum length of main value.
     * maxvallen: Maximum value length.
     * entryspace: number of empty lines between entries.
@@ -51,21 +55,46 @@ class TextOutputPlugin(BaseOutputPlugin):
     _expectedParams = (
                 ("color", True),
                 ("mainfield", None),
-                ("fields", None),
-                ("excludefields", None),
+                ("fields", list()),
+                ("exclude", list()),
                 ("maxmainlen", 120),
                 ("maxvallen", 80),
                 ("docsep", 1),
                 ("condensed", False),
             )
 
+    def apply(self, verb, params, _):
+        """Parameter postprocessing"""
+        print(params)
+        super().apply(verb, params, _)
+        if type(self.params['fields']) == str:
+            self.params['fields'] = [self.params['fields']]
+        if type(self.params['excludefields']) == str:
+            self.params['excludefields'] = [self.params['excludefields']]
+        return self
+
     def colorize(self, text, *args, **kwargs):
+        """Output colorized if configured"""
         if self.params['color']:
             from termcolor import colored
             return colored(text, *args, **kwargs)
         else:
             return text
             
+    def check_field_output(self, key):
+        """
+        Check if field should be output:
+
+        * if whitelist is defined, field must be contained here and not contained on blacklist
+        * if no whitelist is defined, field must not be contained on blacklist
+
+        List indices are stripped from field name.
+        """
+        cprefixni = reRemoveIndices.sub("", key)
+        fields = self.params['fields']
+        excludefields = self.params['excludefields']
+        return (len(fields) > 0 and cprefixni in fields and cprefixni not in excludefields) or (len(fields) <= 0 and cprefixni not in excludefields)
+
     def render_fields(self, docpart, prefix=""):
         """
         Renders fields of a part of a document recursively. Parameters:
@@ -88,11 +117,12 @@ class TextOutputPlugin(BaseOutputPlugin):
                 if type(docpart[key]) in (dict, list):
                     result += self.render_fields(docpart[key], cprefix)
                 else:
-                    origval = str(docpart[key])
-                    val = origval[:maxlen]
-                    if len(origval) > len(val):
-                        val += self.colorize("[...]", attrs=["dark"])
-                    result += "%s=%s%s" % (self.colorize(cprefix, "green"), val, suffix)
+                    if self.check_field_output(cprefix):
+                        origval = str(docpart[key])
+                        val = origval[:maxlen]
+                        if len(origval) > len(val):
+                            val += self.colorize("[...]", attrs=["dark"])
+                        result += "%s=%s%s" % (self.colorize(cprefix, "green"), val, suffix)
         elif type(docpart) == list:
             for i in range(0, len(docpart)):
                 cprefix = prefix + "[%d]" % (i + 1)
@@ -100,11 +130,12 @@ class TextOutputPlugin(BaseOutputPlugin):
                 if type(docpart[i]) in (dict, list):
                     result += self.render_fields(docpart[i], cprefix)
                 else:
-                    origval = str(docpart[i])
-                    val = origval[:maxlen]
-                    if len(origval) > len(val):
-                        val += self.colorize("[...]", attrs=["dark"])
-                    result += "%s=%s%s" % (self.colorize(cprefix, "green"), val, suffix)
+                    if self.check_field_output(cprefix):
+                        origval = str(docpart[i])
+                        val = origval[:maxlen]
+                        if len(origval) > len(val):
+                            val += self.colorize("[...]", attrs=["dark"])
+                        result += "%s=%s%s" % (self.colorize(cprefix, "green"), val, suffix)
         else:
             result += str(docpart) + suffix
 
