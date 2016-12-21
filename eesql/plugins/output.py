@@ -69,8 +69,8 @@ class TextOutputPlugin(BaseOutputPlugin):
         super().apply(verb, params, _)
         if type(self.params['fields']) == str:
             self.params['fields'] = [self.params['fields']]
-        if type(self.params['excludefields']) == str:
-            self.params['excludefields'] = [self.params['excludefields']]
+        if type(self.params['exclude']) == str:
+            self.params['exclude'] = [self.params['exclude']]
         return self
 
     def colorize(self, text, *args, **kwargs):
@@ -92,7 +92,7 @@ class TextOutputPlugin(BaseOutputPlugin):
         """
         cprefixni = reRemoveIndices.sub("", key)
         fields = self.params['fields']
-        excludefields = self.params['excludefields']
+        excludefields = self.params['exclude']
         return (len(fields) > 0 and cprefixni in fields and cprefixni not in excludefields) or (len(fields) <= 0 and cprefixni not in excludefields)
 
     def render_fields(self, docpart, prefix=""):
@@ -122,7 +122,7 @@ class TextOutputPlugin(BaseOutputPlugin):
                         val = origval[:maxlen]
                         if len(origval) > len(val):
                             val += self.colorize("[...]", attrs=["dark"])
-                        result += "%s=%s%s" % (self.colorize(cprefix, "green"), val, suffix)
+                        result += "%s%s%s%s" % (self.colorize(cprefix, "green"), self.colorize("=", "yellow"), val, suffix)
         elif type(docpart) == list:
             for i in range(0, len(docpart)):
                 cprefix = prefix + "[%d]" % (i + 1)
@@ -135,7 +135,7 @@ class TextOutputPlugin(BaseOutputPlugin):
                         val = origval[:maxlen]
                         if len(origval) > len(val):
                             val += self.colorize("[...]", attrs=["dark"])
-                        result += "%s=%s%s" % (self.colorize(cprefix, "green"), val, suffix)
+                        result += "%s%s%s%s" % (self.colorize(cprefix, "green"), self.colorize("=", "yellow"), val, suffix)
         else:
             result += str(docpart) + suffix
 
