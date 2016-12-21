@@ -31,7 +31,7 @@ class EESQLParserListener(eesqlParserListener):
 
     # Main rule
     def exitEesql(self, ctx):
-        ctx.query = dict()
+        ctx.query = ctx.firstExpr().json
         for searchExpr in ctx.searchExpr():
             ctx.query.update(searchExpr.json)
         ctx.query.update(self.aggs.getJSON())
@@ -41,6 +41,16 @@ class EESQLParserListener(eesqlParserListener):
     # Expressions
     def exitSearchExpr(self, ctx):
         ctx.json = ctx.genericExpr().json
+
+    def exitFirstSearchExpr(self, ctx):
+        ctx.json = ctx.searchExpr().json
+
+    def exitQueryStringExpr(self, ctx):
+        plugin = self.engine.resolveQueryStringPlugin()
+        ctx.json = plugin.apply(None, ctx.queryString().query, None)
+
+    def exitQueryString(self, ctx):
+        ctx.query = "".join([qsc.getText() for qsc in ctx.QueryStringChar()])
 
     def exitAggregationExpr(self, ctx):
         try:

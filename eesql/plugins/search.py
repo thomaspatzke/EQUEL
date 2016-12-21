@@ -9,6 +9,14 @@ class GenericSearchPlugin(GenericPlugin):
     def apply(self, verb, params, aggs):
         return { "query": super().apply(verb, params) }
 
+class ESQueryStringPlugin(BasePlugin):
+    """Convert Elasticsearch query string into Query DSL structure"""
+    name = "Elasticsearch Query String Plugin"
+    description = "Convert Elasticsearch query string into Query DSL structure"
+
+    def apply(self, verb, query, aggs):
+        return { "query": { "query_string": { "query": query } } }
+
 class SearchShortcutPlugin(BaseShortcutPlugin):
     """
     Converts given value into a query_string query. Prefixes:
