@@ -3,7 +3,7 @@ parser grammar eesqlParser ;
 options { tokenVocab=eesqlLexer; }
 
 eesql:
-    searchExpr ( Separator searchExpr )* ( Separator AGG aggregationExpr ( Separator aggregationExpr )* )? ( Separator POSTPROC postprocExpr ( Separator postprocExpr )* )? ( Separator OUTPUT outputExpr ( Separator outputExpr )* )? ;
+    firstExpr ( Separator searchExpr )* ( Separator AGG aggregationExpr ( Separator aggregationExpr )* )? ( Separator POSTPROC postprocExpr ( Separator postprocExpr )* )? ( Separator OUTPUT outputExpr ( Separator outputExpr )* )? ;
 
 verb: Identifier ;
 
@@ -13,6 +13,13 @@ genericExpr:
 
 searchExpr:
     genericExpr ;
+
+queryString:
+    QueryStringChar+ ;
+
+firstExpr:
+    searchExpr # firstSearchExpr |
+    queryString # queryStringExpr ;
 
 /*
 orSearchExpr:

@@ -34,6 +34,21 @@ class eesqlParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by eesqlParser#queryString.
+    def visitQueryString(self, ctx:eesqlParser.QueryStringContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by eesqlParser#firstSearchExpr.
+    def visitFirstSearchExpr(self, ctx:eesqlParser.FirstSearchExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by eesqlParser#queryStringExpr.
+    def visitQueryStringExpr(self, ctx:eesqlParser.QueryStringExprContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by eesqlParser#filterExpr.
     def visitFilterExpr(self, ctx:eesqlParser.FilterExprContext):
         return self.visitChildren(ctx)

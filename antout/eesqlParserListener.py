@@ -53,6 +53,33 @@ class eesqlParserListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by eesqlParser#queryString.
+    def enterQueryString(self, ctx:eesqlParser.QueryStringContext):
+        pass
+
+    # Exit a parse tree produced by eesqlParser#queryString.
+    def exitQueryString(self, ctx:eesqlParser.QueryStringContext):
+        pass
+
+
+    # Enter a parse tree produced by eesqlParser#firstSearchExpr.
+    def enterFirstSearchExpr(self, ctx:eesqlParser.FirstSearchExprContext):
+        pass
+
+    # Exit a parse tree produced by eesqlParser#firstSearchExpr.
+    def exitFirstSearchExpr(self, ctx:eesqlParser.FirstSearchExprContext):
+        pass
+
+
+    # Enter a parse tree produced by eesqlParser#queryStringExpr.
+    def enterQueryStringExpr(self, ctx:eesqlParser.QueryStringExprContext):
+        pass
+
+    # Exit a parse tree produced by eesqlParser#queryStringExpr.
+    def exitQueryStringExpr(self, ctx:eesqlParser.QueryStringExprContext):
+        pass
+
+
     # Enter a parse tree produced by eesqlParser#filterExpr.
     def enterFilterExpr(self, ctx:eesqlParser.FilterExprContext):
         pass
