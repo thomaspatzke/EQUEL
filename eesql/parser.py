@@ -46,7 +46,8 @@ class EESQLParserListener(eesqlParserListener):
         ctx.json = ctx.searchExpr().json
 
     def exitQueryStringExpr(self, ctx):
-        ctx.json = { "query": { "query_string": { "query": ctx.queryString().query } } }
+        plugin = self.engine.resolveQueryStringPlugin()
+        ctx.json = plugin.apply(None, ctx.queryString().query, None)
 
     def exitQueryString(self, ctx):
         ctx.query = "".join([qsc.getText() for qsc in ctx.QueryStringChar()])

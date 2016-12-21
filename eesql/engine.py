@@ -9,13 +9,15 @@ class EESQLEngine:
     """Main class for EESQL usage"""
 
     # Plugin Types
-    PT_SEARCH    = 0
-    PT_AGGREGATE = 1
-    PT_POSTPROC  = 2
-    PT_OUTPUT    = 3
+    PT_QUERYSTRING = 0
+    PT_SEARCH      = 1
+    PT_AGGREGATE   = 2
+    PT_POSTPROC    = 3
+    PT_OUTPUT      = 4
 
     # Default Plugins
     defaultPlugins = [
+            (PT_QUERYSTRING, ["fallback"], search.ESQueryStringPlugin),
             (PT_SEARCH, ["fallback"], search.GenericSearchPlugin),
             (PT_SEARCH, ["shortcut"], search.SearchShortcutPlugin),
             (PT_SEARCH, ["sort"], search.SortPlugin),
@@ -32,7 +34,7 @@ class EESQLEngine:
         """Initializes EESQL engine"""
         self.host = host
         self.index = index
-        self.plugins = [dict(), dict(), dict(), dict()]
+        self.plugins = [dict(), dict(), dict(), dict(), dict()]
         self.registerDefaultPlugins()
 
     def parseEESQL(self, eesql, inputclass=InputStream, **kwargs):
@@ -51,7 +53,9 @@ class EESQLEngine:
         Default plugin (: prefixed) is verb 'default'.
         Fallback plugin that is chosen if no matching plugin was found is defined with 'fallback'.
         """
-        if type(verbs) == str:
+        if verbs == None:
+            self.plugins[plugintype] = cls
+        elif type(verbs) == str:
             self.plugins[plugintype][verb] = cls
         elif type(verbs) == list:
             for verb in verbs:
@@ -85,6 +89,9 @@ class EESQLEngine:
             except KeyError:
                 raise self.PluginNotFound("Request for plugin of type %d, verb '%s' can't be resolved" % (type, verb))
         return plugin()
+
+    def resolveQueryStringPlugin(self):
+        return self.plugins[self.PT_QUERYSTRING]["fallback"]()
 
     def resolveShortcutPlugin(self, type):
         try:
