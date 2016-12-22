@@ -1,0 +1,2 @@
+EventID:4625 AND NOT ComputerName:(foo bar) | agg terms field=ComputerName as computer | terms field=TargetUserName as computer_user | min field=@timestamp | max field=@timestamp | agg computer value_count field=TargetUserName | agg root terms field=TargetUserName | value_count field=ComputerName 
+

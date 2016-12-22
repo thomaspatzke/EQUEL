@@ -1,4 +1,4 @@
-# Generated from eesqlParser.g4 by ANTLR 4.5.1
+# Generated from equelParser.g4 by ANTLR 4.5.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -65,9 +65,9 @@ def serializedATN():
         return buf.getvalue()
 
 
-class eesqlParser ( Parser ):
+class equelParser ( Parser ):
 
-    grammarFileName = "eesqlParser.g4"
+    grammarFileName = "equelParser.g4"
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
@@ -86,7 +86,7 @@ class eesqlParser ( Parser ):
                       "RParL", "SingleQuotedValue", "DoubleQuotedValue", 
                       "UnquotedValue" ]
 
-    RULE_eesql = 0
+    RULE_equel = 0
     RULE_verb = 1
     RULE_genericExpr = 2
     RULE_searchExpr = 3
@@ -101,7 +101,7 @@ class eesqlParser ( Parser ):
     RULE_name = 12
     RULE_value = 13
 
-    ruleNames =  [ "eesql", "verb", "genericExpr", "searchExpr", "queryString", 
+    ruleNames =  [ "equel", "verb", "genericExpr", "searchExpr", "queryString", 
                    "firstExpr", "filterExpr", "aggregationExpr", "postprocExpr", 
                    "outputExpr", "shortcutExpr", "parameter", "name", "value" ]
 
@@ -134,83 +134,83 @@ class eesqlParser ( Parser ):
 
 
 
-    class EesqlContext(ParserRuleContext):
+    class EquelContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def firstExpr(self):
-            return self.getTypedRuleContext(eesqlParser.FirstExprContext,0)
+            return self.getTypedRuleContext(equelParser.FirstExprContext,0)
 
 
         def Separator(self, i:int=None):
             if i is None:
-                return self.getTokens(eesqlParser.Separator)
+                return self.getTokens(equelParser.Separator)
             else:
-                return self.getToken(eesqlParser.Separator, i)
+                return self.getToken(equelParser.Separator, i)
 
         def searchExpr(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(eesqlParser.SearchExprContext)
+                return self.getTypedRuleContexts(equelParser.SearchExprContext)
             else:
-                return self.getTypedRuleContext(eesqlParser.SearchExprContext,i)
+                return self.getTypedRuleContext(equelParser.SearchExprContext,i)
 
 
         def AGG(self):
-            return self.getToken(eesqlParser.AGG, 0)
+            return self.getToken(equelParser.AGG, 0)
 
         def aggregationExpr(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(eesqlParser.AggregationExprContext)
+                return self.getTypedRuleContexts(equelParser.AggregationExprContext)
             else:
-                return self.getTypedRuleContext(eesqlParser.AggregationExprContext,i)
+                return self.getTypedRuleContext(equelParser.AggregationExprContext,i)
 
 
         def POSTPROC(self):
-            return self.getToken(eesqlParser.POSTPROC, 0)
+            return self.getToken(equelParser.POSTPROC, 0)
 
         def postprocExpr(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(eesqlParser.PostprocExprContext)
+                return self.getTypedRuleContexts(equelParser.PostprocExprContext)
             else:
-                return self.getTypedRuleContext(eesqlParser.PostprocExprContext,i)
+                return self.getTypedRuleContext(equelParser.PostprocExprContext,i)
 
 
         def OUTPUT(self):
-            return self.getToken(eesqlParser.OUTPUT, 0)
+            return self.getToken(equelParser.OUTPUT, 0)
 
         def outputExpr(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(eesqlParser.OutputExprContext)
+                return self.getTypedRuleContexts(equelParser.OutputExprContext)
             else:
-                return self.getTypedRuleContext(eesqlParser.OutputExprContext,i)
+                return self.getTypedRuleContext(equelParser.OutputExprContext,i)
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_eesql
+            return equelParser.RULE_equel
 
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterEesql" ):
-                listener.enterEesql(self)
+            if hasattr( listener, "enterEquel" ):
+                listener.enterEquel(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitEesql" ):
-                listener.exitEesql(self)
+            if hasattr( listener, "exitEquel" ):
+                listener.exitEquel(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitEesql" ):
-                return visitor.visitEesql(self)
+            if hasattr( visitor, "visitEquel" ):
+                return visitor.visitEquel(self)
             else:
                 return visitor.visitChildren(self)
 
 
 
 
-    def eesql(self):
+    def equel(self):
 
-        localctx = eesqlParser.EesqlContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 0, self.RULE_eesql)
+        localctx = equelParser.EquelContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 0, self.RULE_equel)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
@@ -222,7 +222,7 @@ class eesqlParser ( Parser ):
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     self.state = 29
-                    self.match(eesqlParser.Separator)
+                    self.match(equelParser.Separator)
                     self.state = 30
                     self.searchExpr() 
                 self.state = 35
@@ -233,9 +233,9 @@ class eesqlParser ( Parser ):
             la_ = self._interp.adaptivePredict(self._input,2,self._ctx)
             if la_ == 1:
                 self.state = 36
-                self.match(eesqlParser.Separator)
+                self.match(equelParser.Separator)
                 self.state = 37
-                self.match(eesqlParser.AGG)
+                self.match(equelParser.AGG)
                 self.state = 38
                 self.aggregationExpr()
                 self.state = 43
@@ -244,7 +244,7 @@ class eesqlParser ( Parser ):
                 while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                     if _alt==1:
                         self.state = 39
-                        self.match(eesqlParser.Separator)
+                        self.match(equelParser.Separator)
                         self.state = 40
                         self.aggregationExpr() 
                     self.state = 45
@@ -257,9 +257,9 @@ class eesqlParser ( Parser ):
             la_ = self._interp.adaptivePredict(self._input,4,self._ctx)
             if la_ == 1:
                 self.state = 48
-                self.match(eesqlParser.Separator)
+                self.match(equelParser.Separator)
                 self.state = 49
-                self.match(eesqlParser.POSTPROC)
+                self.match(equelParser.POSTPROC)
                 self.state = 50
                 self.postprocExpr()
                 self.state = 55
@@ -268,7 +268,7 @@ class eesqlParser ( Parser ):
                 while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                     if _alt==1:
                         self.state = 51
-                        self.match(eesqlParser.Separator)
+                        self.match(equelParser.Separator)
                         self.state = 52
                         self.postprocExpr() 
                     self.state = 57
@@ -279,19 +279,19 @@ class eesqlParser ( Parser ):
 
             self.state = 70
             _la = self._input.LA(1)
-            if _la==eesqlParser.Separator:
+            if _la==equelParser.Separator:
                 self.state = 60
-                self.match(eesqlParser.Separator)
+                self.match(equelParser.Separator)
                 self.state = 61
-                self.match(eesqlParser.OUTPUT)
+                self.match(equelParser.OUTPUT)
                 self.state = 62
                 self.outputExpr()
                 self.state = 67
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==eesqlParser.Separator:
+                while _la==equelParser.Separator:
                     self.state = 63
-                    self.match(eesqlParser.Separator)
+                    self.match(equelParser.Separator)
                     self.state = 64
                     self.outputExpr()
                     self.state = 69
@@ -315,10 +315,10 @@ class eesqlParser ( Parser ):
             self.parser = parser
 
         def Identifier(self):
-            return self.getToken(eesqlParser.Identifier, 0)
+            return self.getToken(equelParser.Identifier, 0)
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_verb
+            return equelParser.RULE_verb
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterVerb" ):
@@ -339,12 +339,12 @@ class eesqlParser ( Parser ):
 
     def verb(self):
 
-        localctx = eesqlParser.VerbContext(self, self._ctx, self.state)
+        localctx = equelParser.VerbContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_verb)
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 72
-            self.match(eesqlParser.Identifier)
+            self.match(equelParser.Identifier)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -361,7 +361,7 @@ class eesqlParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_genericExpr
+            return equelParser.RULE_genericExpr
 
      
         def copyFrom(self, ctx:ParserRuleContext):
@@ -371,12 +371,12 @@ class eesqlParser ( Parser ):
 
     class ShortcutContext(GenericExprContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.GenericExprContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.GenericExprContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def shortcutExpr(self):
-            return self.getTypedRuleContext(eesqlParser.ShortcutExprContext,0)
+            return self.getTypedRuleContext(equelParser.ShortcutExprContext,0)
 
 
         def enterRule(self, listener:ParseTreeListener):
@@ -396,18 +396,18 @@ class eesqlParser ( Parser ):
 
     class GenericContext(GenericExprContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.GenericExprContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.GenericExprContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def verb(self):
-            return self.getTypedRuleContext(eesqlParser.VerbContext,0)
+            return self.getTypedRuleContext(equelParser.VerbContext,0)
 
         def parameter(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(eesqlParser.ParameterContext)
+                return self.getTypedRuleContexts(equelParser.ParameterContext)
             else:
-                return self.getTypedRuleContext(eesqlParser.ParameterContext,i)
+                return self.getTypedRuleContext(equelParser.ParameterContext,i)
 
 
         def enterRule(self, listener:ParseTreeListener):
@@ -428,21 +428,21 @@ class eesqlParser ( Parser ):
 
     def genericExpr(self):
 
-        localctx = eesqlParser.GenericExprContext(self, self._ctx, self.state)
+        localctx = equelParser.GenericExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_genericExpr)
         self._la = 0 # Token type
         try:
             self.state = 82
             token = self._input.LA(1)
-            if token in [eesqlParser.Identifier]:
-                localctx = eesqlParser.GenericContext(self, localctx)
+            if token in [equelParser.Identifier]:
+                localctx = equelParser.GenericContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 74
                 self.verb()
                 self.state = 78
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==eesqlParser.Identifier or _la==eesqlParser.LParL:
+                while _la==equelParser.Identifier or _la==equelParser.LParL:
                     self.state = 75
                     self.parameter()
                     self.state = 80
@@ -450,8 +450,8 @@ class eesqlParser ( Parser ):
                     _la = self._input.LA(1)
 
 
-            elif token in [eesqlParser.PrefixChar]:
-                localctx = eesqlParser.ShortcutContext(self, localctx)
+            elif token in [equelParser.PrefixChar]:
+                localctx = equelParser.ShortcutContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
                 self.state = 81
                 self.shortcutExpr()
@@ -474,11 +474,11 @@ class eesqlParser ( Parser ):
             self.parser = parser
 
         def genericExpr(self):
-            return self.getTypedRuleContext(eesqlParser.GenericExprContext,0)
+            return self.getTypedRuleContext(equelParser.GenericExprContext,0)
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_searchExpr
+            return equelParser.RULE_searchExpr
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterSearchExpr" ):
@@ -499,7 +499,7 @@ class eesqlParser ( Parser ):
 
     def searchExpr(self):
 
-        localctx = eesqlParser.SearchExprContext(self, self._ctx, self.state)
+        localctx = equelParser.SearchExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 6, self.RULE_searchExpr)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -521,12 +521,12 @@ class eesqlParser ( Parser ):
 
         def QueryStringChar(self, i:int=None):
             if i is None:
-                return self.getTokens(eesqlParser.QueryStringChar)
+                return self.getTokens(equelParser.QueryStringChar)
             else:
-                return self.getToken(eesqlParser.QueryStringChar, i)
+                return self.getToken(equelParser.QueryStringChar, i)
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_queryString
+            return equelParser.RULE_queryString
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterQueryString" ):
@@ -547,7 +547,7 @@ class eesqlParser ( Parser ):
 
     def queryString(self):
 
-        localctx = eesqlParser.QueryStringContext(self, self._ctx, self.state)
+        localctx = equelParser.QueryStringContext(self, self._ctx, self.state)
         self.enterRule(localctx, 8, self.RULE_queryString)
         self._la = 0 # Token type
         try:
@@ -557,11 +557,11 @@ class eesqlParser ( Parser ):
             _la = self._input.LA(1)
             while True:
                 self.state = 86
-                self.match(eesqlParser.QueryStringChar)
+                self.match(equelParser.QueryStringChar)
                 self.state = 89 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==eesqlParser.QueryStringChar):
+                if not (_la==equelParser.QueryStringChar):
                     break
 
         except RecognitionException as re:
@@ -580,7 +580,7 @@ class eesqlParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_firstExpr
+            return equelParser.RULE_firstExpr
 
      
         def copyFrom(self, ctx:ParserRuleContext):
@@ -590,12 +590,12 @@ class eesqlParser ( Parser ):
 
     class FirstSearchExprContext(FirstExprContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.FirstExprContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.FirstExprContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def searchExpr(self):
-            return self.getTypedRuleContext(eesqlParser.SearchExprContext,0)
+            return self.getTypedRuleContext(equelParser.SearchExprContext,0)
 
 
         def enterRule(self, listener:ParseTreeListener):
@@ -615,12 +615,12 @@ class eesqlParser ( Parser ):
 
     class QueryStringExprContext(FirstExprContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.FirstExprContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.FirstExprContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def queryString(self):
-            return self.getTypedRuleContext(eesqlParser.QueryStringContext,0)
+            return self.getTypedRuleContext(equelParser.QueryStringContext,0)
 
 
         def enterRule(self, listener:ParseTreeListener):
@@ -641,19 +641,19 @@ class eesqlParser ( Parser ):
 
     def firstExpr(self):
 
-        localctx = eesqlParser.FirstExprContext(self, self._ctx, self.state)
+        localctx = equelParser.FirstExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 10, self.RULE_firstExpr)
         try:
             self.state = 93
             token = self._input.LA(1)
-            if token in [eesqlParser.PrefixChar, eesqlParser.Identifier]:
-                localctx = eesqlParser.FirstSearchExprContext(self, localctx)
+            if token in [equelParser.PrefixChar, equelParser.Identifier]:
+                localctx = equelParser.FirstSearchExprContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 91
                 self.searchExpr()
 
-            elif token in [eesqlParser.QueryStringChar]:
-                localctx = eesqlParser.QueryStringExprContext(self, localctx)
+            elif token in [equelParser.QueryStringChar]:
+                localctx = equelParser.QueryStringExprContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
                 self.state = 92
                 self.queryString()
@@ -676,11 +676,11 @@ class eesqlParser ( Parser ):
             self.parser = parser
 
         def searchExpr(self):
-            return self.getTypedRuleContext(eesqlParser.SearchExprContext,0)
+            return self.getTypedRuleContext(equelParser.SearchExprContext,0)
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_filterExpr
+            return equelParser.RULE_filterExpr
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterFilterExpr" ):
@@ -701,7 +701,7 @@ class eesqlParser ( Parser ):
 
     def filterExpr(self):
 
-        localctx = eesqlParser.FilterExprContext(self, self._ctx, self.state)
+        localctx = equelParser.FilterExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_filterExpr)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -724,23 +724,23 @@ class eesqlParser ( Parser ):
             self.aggId = None # Token
 
         def genericExpr(self):
-            return self.getTypedRuleContext(eesqlParser.GenericExprContext,0)
+            return self.getTypedRuleContext(equelParser.GenericExprContext,0)
 
 
         def AGG(self):
-            return self.getToken(eesqlParser.AGG, 0)
+            return self.getToken(equelParser.AGG, 0)
 
         def AS(self):
-            return self.getToken(eesqlParser.AS, 0)
+            return self.getToken(equelParser.AS, 0)
 
         def Identifier(self, i:int=None):
             if i is None:
-                return self.getTokens(eesqlParser.Identifier)
+                return self.getTokens(equelParser.Identifier)
             else:
-                return self.getToken(eesqlParser.Identifier, i)
+                return self.getToken(equelParser.Identifier, i)
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_aggregationExpr
+            return equelParser.RULE_aggregationExpr
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterAggregationExpr" ):
@@ -761,29 +761,29 @@ class eesqlParser ( Parser ):
 
     def aggregationExpr(self):
 
-        localctx = eesqlParser.AggregationExprContext(self, self._ctx, self.state)
+        localctx = equelParser.AggregationExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_aggregationExpr)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 99
             _la = self._input.LA(1)
-            if _la==eesqlParser.AGG:
+            if _la==equelParser.AGG:
                 self.state = 97
-                self.match(eesqlParser.AGG)
+                self.match(equelParser.AGG)
                 self.state = 98
-                localctx.targetId = self.match(eesqlParser.Identifier)
+                localctx.targetId = self.match(equelParser.Identifier)
 
 
             self.state = 101
             self.genericExpr()
             self.state = 104
             _la = self._input.LA(1)
-            if _la==eesqlParser.AS:
+            if _la==equelParser.AS:
                 self.state = 102
-                self.match(eesqlParser.AS)
+                self.match(equelParser.AS)
                 self.state = 103
-                localctx.aggId = self.match(eesqlParser.Identifier)
+                localctx.aggId = self.match(equelParser.Identifier)
 
 
         except RecognitionException as re:
@@ -801,11 +801,11 @@ class eesqlParser ( Parser ):
             self.parser = parser
 
         def genericExpr(self):
-            return self.getTypedRuleContext(eesqlParser.GenericExprContext,0)
+            return self.getTypedRuleContext(equelParser.GenericExprContext,0)
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_postprocExpr
+            return equelParser.RULE_postprocExpr
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterPostprocExpr" ):
@@ -826,7 +826,7 @@ class eesqlParser ( Parser ):
 
     def postprocExpr(self):
 
-        localctx = eesqlParser.PostprocExprContext(self, self._ctx, self.state)
+        localctx = equelParser.PostprocExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_postprocExpr)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -848,17 +848,17 @@ class eesqlParser ( Parser ):
             self.outId = None # Token
 
         def genericExpr(self):
-            return self.getTypedRuleContext(eesqlParser.GenericExprContext,0)
+            return self.getTypedRuleContext(equelParser.GenericExprContext,0)
 
 
         def AS(self):
-            return self.getToken(eesqlParser.AS, 0)
+            return self.getToken(equelParser.AS, 0)
 
         def Identifier(self):
-            return self.getToken(eesqlParser.Identifier, 0)
+            return self.getToken(equelParser.Identifier, 0)
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_outputExpr
+            return equelParser.RULE_outputExpr
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterOutputExpr" ):
@@ -879,7 +879,7 @@ class eesqlParser ( Parser ):
 
     def outputExpr(self):
 
-        localctx = eesqlParser.OutputExprContext(self, self._ctx, self.state)
+        localctx = equelParser.OutputExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_outputExpr)
         self._la = 0 # Token type
         try:
@@ -888,11 +888,11 @@ class eesqlParser ( Parser ):
             self.genericExpr()
             self.state = 111
             _la = self._input.LA(1)
-            if _la==eesqlParser.AS:
+            if _la==equelParser.AS:
                 self.state = 109
-                self.match(eesqlParser.AS)
+                self.match(equelParser.AS)
                 self.state = 110
-                localctx.outId = self.match(eesqlParser.Identifier)
+                localctx.outId = self.match(equelParser.Identifier)
 
 
         except RecognitionException as re:
@@ -910,14 +910,14 @@ class eesqlParser ( Parser ):
             self.parser = parser
 
         def PrefixChar(self):
-            return self.getToken(eesqlParser.PrefixChar, 0)
+            return self.getToken(equelParser.PrefixChar, 0)
 
         def value(self):
-            return self.getTypedRuleContext(eesqlParser.ValueContext,0)
+            return self.getTypedRuleContext(equelParser.ValueContext,0)
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_shortcutExpr
+            return equelParser.RULE_shortcutExpr
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterShortcutExpr" ):
@@ -938,12 +938,12 @@ class eesqlParser ( Parser ):
 
     def shortcutExpr(self):
 
-        localctx = eesqlParser.ShortcutExprContext(self, self._ctx, self.state)
+        localctx = equelParser.ShortcutExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 20, self.RULE_shortcutExpr)
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 113
-            self.match(eesqlParser.PrefixChar)
+            self.match(equelParser.PrefixChar)
             self.state = 114
             self.value()
         except RecognitionException as re:
@@ -962,7 +962,7 @@ class eesqlParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_parameter
+            return equelParser.RULE_parameter
 
      
         def copyFrom(self, ctx:ParserRuleContext):
@@ -972,12 +972,12 @@ class eesqlParser ( Parser ):
 
     class SingleParamContext(ParameterContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.ParameterContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ParameterContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def Identifier(self):
-            return self.getToken(eesqlParser.Identifier, 0)
+            return self.getToken(equelParser.Identifier, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterSingleParam" ):
@@ -996,25 +996,25 @@ class eesqlParser ( Parser ):
 
     class UnnamedListContext(ParameterContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.ParameterContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ParameterContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def LParL(self):
-            return self.getToken(eesqlParser.LParL, 0)
+            return self.getToken(equelParser.LParL, 0)
         def value(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(eesqlParser.ValueContext)
+                return self.getTypedRuleContexts(equelParser.ValueContext)
             else:
-                return self.getTypedRuleContext(eesqlParser.ValueContext,i)
+                return self.getTypedRuleContext(equelParser.ValueContext,i)
 
         def RParL(self):
-            return self.getToken(eesqlParser.RParL, 0)
+            return self.getToken(equelParser.RParL, 0)
         def LSep(self, i:int=None):
             if i is None:
-                return self.getTokens(eesqlParser.LSep)
+                return self.getTokens(equelParser.LSep)
             else:
-                return self.getToken(eesqlParser.LSep, i)
+                return self.getToken(equelParser.LSep, i)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterUnnamedList" ):
@@ -1033,17 +1033,17 @@ class eesqlParser ( Parser ):
 
     class KVParamContext(ParameterContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.ParameterContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ParameterContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def name(self):
-            return self.getTypedRuleContext(eesqlParser.NameContext,0)
+            return self.getTypedRuleContext(equelParser.NameContext,0)
 
         def Equals(self):
-            return self.getToken(eesqlParser.Equals, 0)
+            return self.getToken(equelParser.Equals, 0)
         def value(self):
-            return self.getTypedRuleContext(eesqlParser.ValueContext,0)
+            return self.getTypedRuleContext(equelParser.ValueContext,0)
 
 
         def enterRule(self, listener:ParseTreeListener):
@@ -1064,36 +1064,36 @@ class eesqlParser ( Parser ):
 
     def parameter(self):
 
-        localctx = eesqlParser.ParameterContext(self, self._ctx, self.state)
+        localctx = equelParser.ParameterContext(self, self._ctx, self.state)
         self.enterRule(localctx, 22, self.RULE_parameter)
         self._la = 0 # Token type
         try:
             self.state = 132
             la_ = self._interp.adaptivePredict(self._input,15,self._ctx)
             if la_ == 1:
-                localctx = eesqlParser.KVParamContext(self, localctx)
+                localctx = equelParser.KVParamContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 116
                 self.name()
                 self.state = 117
-                self.match(eesqlParser.Equals)
+                self.match(equelParser.Equals)
                 self.state = 118
                 self.value()
                 pass
 
             elif la_ == 2:
-                localctx = eesqlParser.UnnamedListContext(self, localctx)
+                localctx = equelParser.UnnamedListContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
                 self.state = 120
-                self.match(eesqlParser.LParL)
+                self.match(equelParser.LParL)
                 self.state = 121
                 self.value()
                 self.state = 126
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==eesqlParser.LSep:
+                while _la==equelParser.LSep:
                     self.state = 122
-                    self.match(eesqlParser.LSep)
+                    self.match(equelParser.LSep)
                     self.state = 123
                     self.value()
                     self.state = 128
@@ -1101,14 +1101,14 @@ class eesqlParser ( Parser ):
                     _la = self._input.LA(1)
 
                 self.state = 129
-                self.match(eesqlParser.RParL)
+                self.match(equelParser.RParL)
                 pass
 
             elif la_ == 3:
-                localctx = eesqlParser.SingleParamContext(self, localctx)
+                localctx = equelParser.SingleParamContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
                 self.state = 131
-                self.match(eesqlParser.Identifier)
+                self.match(equelParser.Identifier)
                 pass
 
 
@@ -1127,10 +1127,10 @@ class eesqlParser ( Parser ):
             self.parser = parser
 
         def Identifier(self):
-            return self.getToken(eesqlParser.Identifier, 0)
+            return self.getToken(equelParser.Identifier, 0)
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_name
+            return equelParser.RULE_name
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterName" ):
@@ -1151,12 +1151,12 @@ class eesqlParser ( Parser ):
 
     def name(self):
 
-        localctx = eesqlParser.NameContext(self, self._ctx, self.state)
+        localctx = equelParser.NameContext(self, self._ctx, self.state)
         self.enterRule(localctx, 24, self.RULE_name)
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 134
-            self.match(eesqlParser.Identifier)
+            self.match(equelParser.Identifier)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1173,7 +1173,7 @@ class eesqlParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return eesqlParser.RULE_value
+            return equelParser.RULE_value
 
      
         def copyFrom(self, ctx:ParserRuleContext):
@@ -1183,12 +1183,12 @@ class eesqlParser ( Parser ):
 
     class SimpleUQValueContext(ValueContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.ValueContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ValueContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def UnquotedValue(self):
-            return self.getToken(eesqlParser.UnquotedValue, 0)
+            return self.getToken(equelParser.UnquotedValue, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterSimpleUQValue" ):
@@ -1207,25 +1207,25 @@ class eesqlParser ( Parser ):
 
     class ValueListContext(ValueContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.ValueContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ValueContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def LParL(self):
-            return self.getToken(eesqlParser.LParL, 0)
+            return self.getToken(equelParser.LParL, 0)
         def value(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(eesqlParser.ValueContext)
+                return self.getTypedRuleContexts(equelParser.ValueContext)
             else:
-                return self.getTypedRuleContext(eesqlParser.ValueContext,i)
+                return self.getTypedRuleContext(equelParser.ValueContext,i)
 
         def RParL(self):
-            return self.getToken(eesqlParser.RParL, 0)
+            return self.getToken(equelParser.RParL, 0)
         def LSep(self, i:int=None):
             if i is None:
-                return self.getTokens(eesqlParser.LSep)
+                return self.getTokens(equelParser.LSep)
             else:
-                return self.getToken(eesqlParser.LSep, i)
+                return self.getToken(equelParser.LSep, i)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterValueList" ):
@@ -1244,12 +1244,12 @@ class eesqlParser ( Parser ):
 
     class SimpleSQValueContext(ValueContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.ValueContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ValueContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def SingleQuotedValue(self):
-            return self.getToken(eesqlParser.SingleQuotedValue, 0)
+            return self.getToken(equelParser.SingleQuotedValue, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterSimpleSQValue" ):
@@ -1268,12 +1268,12 @@ class eesqlParser ( Parser ):
 
     class SimpleDQValueContext(ValueContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.ValueContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ValueContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def DoubleQuotedValue(self):
-            return self.getToken(eesqlParser.DoubleQuotedValue, 0)
+            return self.getToken(equelParser.DoubleQuotedValue, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterSimpleDQValue" ):
@@ -1292,17 +1292,17 @@ class eesqlParser ( Parser ):
 
     class NestedSearchContext(ValueContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a eesqlParser.ValueContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ValueContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
         def LParS(self):
-            return self.getToken(eesqlParser.LParS, 0)
+            return self.getToken(equelParser.LParS, 0)
         def searchExpr(self):
-            return self.getTypedRuleContext(eesqlParser.SearchExprContext,0)
+            return self.getTypedRuleContext(equelParser.SearchExprContext,0)
 
         def RParS(self):
-            return self.getToken(eesqlParser.RParS, 0)
+            return self.getToken(equelParser.RParS, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterNestedSearch" ):
@@ -1322,53 +1322,53 @@ class eesqlParser ( Parser ):
 
     def value(self):
 
-        localctx = eesqlParser.ValueContext(self, self._ctx, self.state)
+        localctx = equelParser.ValueContext(self, self._ctx, self.state)
         self.enterRule(localctx, 26, self.RULE_value)
         self._la = 0 # Token type
         try:
             self.state = 154
             token = self._input.LA(1)
-            if token in [eesqlParser.UnquotedValue]:
-                localctx = eesqlParser.SimpleUQValueContext(self, localctx)
+            if token in [equelParser.UnquotedValue]:
+                localctx = equelParser.SimpleUQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 136
-                self.match(eesqlParser.UnquotedValue)
+                self.match(equelParser.UnquotedValue)
 
-            elif token in [eesqlParser.SingleQuotedValue]:
-                localctx = eesqlParser.SimpleSQValueContext(self, localctx)
+            elif token in [equelParser.SingleQuotedValue]:
+                localctx = equelParser.SimpleSQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
                 self.state = 137
-                self.match(eesqlParser.SingleQuotedValue)
+                self.match(equelParser.SingleQuotedValue)
 
-            elif token in [eesqlParser.DoubleQuotedValue]:
-                localctx = eesqlParser.SimpleDQValueContext(self, localctx)
+            elif token in [equelParser.DoubleQuotedValue]:
+                localctx = equelParser.SimpleDQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
                 self.state = 138
-                self.match(eesqlParser.DoubleQuotedValue)
+                self.match(equelParser.DoubleQuotedValue)
 
-            elif token in [eesqlParser.LParS]:
-                localctx = eesqlParser.NestedSearchContext(self, localctx)
+            elif token in [equelParser.LParS]:
+                localctx = equelParser.NestedSearchContext(self, localctx)
                 self.enterOuterAlt(localctx, 4)
                 self.state = 139
-                self.match(eesqlParser.LParS)
+                self.match(equelParser.LParS)
                 self.state = 140
                 self.searchExpr()
                 self.state = 141
-                self.match(eesqlParser.RParS)
+                self.match(equelParser.RParS)
 
-            elif token in [eesqlParser.LParL]:
-                localctx = eesqlParser.ValueListContext(self, localctx)
+            elif token in [equelParser.LParL]:
+                localctx = equelParser.ValueListContext(self, localctx)
                 self.enterOuterAlt(localctx, 5)
                 self.state = 143
-                self.match(eesqlParser.LParL)
+                self.match(equelParser.LParL)
                 self.state = 144
                 self.value()
                 self.state = 149
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==eesqlParser.LSep:
+                while _la==equelParser.LSep:
                     self.state = 145
-                    self.match(eesqlParser.LSep)
+                    self.match(equelParser.LSep)
                     self.state = 146
                     self.value()
                     self.state = 151
@@ -1376,7 +1376,7 @@ class eesqlParser ( Parser ):
                     _la = self._input.LA(1)
 
                 self.state = 152
-                self.match(eesqlParser.RParL)
+                self.match(equelParser.RParL)
 
             else:
                 raise NoViableAltException(self)

@@ -1,8 +1,7 @@
-parser grammar eesqlParser ;
-//options { tokenVocab=eesqlLexer; language=Python3; }
-options { tokenVocab=eesqlLexer; }
+parser grammar equelParser ;
+options { tokenVocab=equelLexer; }
 
-eesql:
+equel:
     firstExpr ( Separator searchExpr )* ( Separator AGG aggregationExpr ( Separator aggregationExpr )* )? ( Separator POSTPROC postprocExpr ( Separator postprocExpr )* )? ( Separator OUTPUT outputExpr ( Separator outputExpr )* )? ;
 
 verb: Identifier ;

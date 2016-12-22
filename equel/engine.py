@@ -1,12 +1,12 @@
 from elasticsearch import Elasticsearch
-from .parser import EESQLParser
-from eesql.plugins import generic, search, aggregate, output
-from .ant.eesqlParser import eesqlParser
+from .parser import EQUELParser
+from equel.plugins import generic, search, aggregate, output
+from .ant.equelParser import equelParser
 from antlr4 import InputStream, FileStream
 import json
 
-class EESQLEngine:
-    """Main class for EESQL usage"""
+class EQUELEngine:
+    """Main class for EQUEL usage"""
 
     # Plugin Types
     PT_QUERYSTRING = 0
@@ -31,21 +31,21 @@ class EESQLEngine:
     defaultOutput = output.BaseOutputPlugin
 
     def __init__(self, host="localhost", index=""):
-        """Initializes EESQL engine"""
+        """Initializes EQUEL engine"""
         self.host = host
         self.index = index
         self.plugins = [dict(), dict(), dict(), dict(), dict()]
         self.registerDefaultPlugins()
 
-    def parseEESQL(self, eesql, inputclass=InputStream, **kwargs):
-        """Parse EESQL expression and return elasticsearch_dsl Search object according to the query expression"""
-        inp = inputclass(eesql)
-        parser = EESQLParser(self)
+    def parseEQUEL(self, equel, inputclass=InputStream, **kwargs):
+        """Parse EQUEL expression and return elasticsearch_dsl Search object according to the query expression"""
+        inp = inputclass(equel)
+        parser = EQUELParser(self)
         parsetree = parser.parse(inp)
-        return EESQLRequest(parsetree, self)
+        return EQUELRequest(parsetree, self)
 
-    def parseEESQLFile(self, filename, **kwargs):
-        return self.parseEESQL(filename, FileStream, **kwargs)
+    def parseEQUELFile(self, filename, **kwargs):
+        return self.parseEQUEL(filename, FileStream, **kwargs)
 
     def registerPlugin(self, plugintype, verbs, cls):
         """
@@ -105,18 +105,18 @@ class EESQLEngine:
             raise self.PluginNotFound("No shortcut plugin of type %d registered" % (type))
 
     def getPluginTypeForContext(self, ctx):
-        if type(ctx) in [eesqlParser.SearchExprContext, eesqlParser.FilterExprContext]:
+        if type(ctx) in [equelParser.SearchExprContext, equelParser.FilterExprContext]:
             return self.PT_SEARCH
-        elif type(ctx) == eesqlParser.AggregationExprContext:
+        elif type(ctx) == equelParser.AggregationExprContext:
             return self.PT_AGGREGATE
-        elif type(ctx) == eesqlParser.PostprocExprContext:
+        elif type(ctx) == equelParser.PostprocExprContext:
             return self.PT_POSTPROC
-        elif type(ctx) == eesqlParser.OutputExprContext:
+        elif type(ctx) == equelParser.OutputExprContext:
             return self.PT_OUTPUT
         else:
             raise TypeError("Expression context type expected!")
 
-class EESQLRequest:
+class EQUELRequest:
     def __init__(self, parsetree, engine):
         self.query = parsetree.query
         self.postproc = parsetree.postproc
@@ -131,14 +131,14 @@ class EESQLRequest:
     def execute(self, *args, **kwargs):
         """Instantiates base elasticsearch_dsl Search object"""
         es = Elasticsearch(hosts=self.engine.host)
-        res = EESQLResult(es.search(index=self.engine.index, body=self.jsonQuery(), *args, **kwargs))
+        res = EQUELResult(es.search(index=self.engine.index, body=self.jsonQuery(), *args, **kwargs))
         for outputname in self.output:
             outputplugin = self.output[outputname]
             res.addOutput(outputname, outputplugin.render(res))
         return res
 
-class EESQLResult:
-    """Result of an EESQL query"""
+class EQUELResult:
+    """Result of an EQUEL query"""
     def __init__(self, result):
         """Creates a result object from a result body"""
         self.result = result

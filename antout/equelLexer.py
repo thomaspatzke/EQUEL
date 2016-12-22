@@ -1,4 +1,4 @@
-# Generated from eesqlLexer.g4 by ANTLR 4.5.1
+# Generated from equelLexer.g4 by ANTLR 4.5.1
 from antlr4 import *
 from io import StringIO
 
@@ -198,7 +198,7 @@ def serializedATN():
         return buf.getvalue()
 
 
-class eesqlLexer(Lexer):
+class equelLexer(Lexer):
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
@@ -247,7 +247,7 @@ class eesqlLexer(Lexer):
                   "LSep", "RParL", "SingleQuotedValue", "DoubleQuotedValue", 
                   "UnquotedValue" ]
 
-    grammarFileName = "eesqlLexer.g4"
+    grammarFileName = "equelLexer.g4"
 
     def __init__(self, input=None):
         super().__init__(input)

@@ -1,39 +1,52 @@
-# EESQL - the Extended ElasticSearch Query Language
+# EQUEL - an **E**lasticsearch **QUE**ry **L**anguage
 
-The projects was motivated by usage of [ElasticSearch](https://www.elastic.co/products/elasticsearch) and
+The projects was motivated by usage of [Elasticsearch](https://www.elastic.co/products/elasticsearch) and
 [Kibana](https://www.elastic.co/products/kibana) for log analysis in incident response and as tool in [web application
 security testing](https://github.com/thomaspatzke/WASE). Both are great tools for this purpose, but Kibana exposes
-only a fraction of the power of ElasticSearch and is missing some features that would make log analysis much easier.
+only a fraction of the power of Elasticsearch and is missing some features that would make log analysis much easier.
 
-This project aims to create a query language for ElasticSearch with the following goals:
+This project aims to create a query language for Elasticsearch with the following goals:
 
 * Easy to understand and to write for humans (compared to Query DSL JSON expressions)
-* Exposure of a big amount of ElasticSearch capabilities (compared to Kibana)
+* Exposure of a big amount of Elasticsearch capabilities (compared to the usual Query String expressions)
 * Extensible by plugin architecture
-* Extension of ElasticSearch capabilities by post processing modules
+* Extension of Elasticsearch capabilities by post processing plugins
+* Easy addition of own output formats and visualizations with output plugins
 * Linear query structure instead of nesting
-* "Everything fits in one line of an EESQL expression"
-* Easy integration in own projects
+* "Everything fits in one line of an EQUEL expression" - especially aggregations
+* Easy integration in projects that already use Elasticsearch
 
-Note: EESQL is neither Splunk SPL nor SQL. It's not the idea to "emulate" on of both.
+Note: EQUEL is neither Splunk SPL nor SQL. It's not the idea to "emulate" one of both.
 
-## EESQL Expressions
+## Requirements
+
+EQUEL was developed with Python 3. It depends on the following packages:
+
+* elasticsearch (5.0.1)
+* elasticsearch\_dsl (5.0.0)
+* antlr4-python3-runtime (4.6)
+* termcolor (1.1.0) - output plugin *text*
+
+Tested versions are given in parentheses. Other versions may work, too. All these 
+modules are installable via pip.
+
+## EQUEL Expressions
 
 ### Overview
 
-ElasticSearch DSL queries and aggregations are expressed in one EESQL expression. Furthermore, post-processing and
+Elasticsearch DSL queries and aggregations are expressed in one EQUEL expression. Furthermore, post-processing and
 output formats can be added to such an expression.
 
-Generally, EESQL expressions are built as follows:
+Generally, EQUEL expressions are built as follows:
 
 search | searchmodifier\_1 |  ... | aggregation\_1 | ... | postprocessing\_1 | ... | output\_1 | ...
 
-Each part in an EESQL expression is called subexpression. All EESQL expression begin with exactly one search
-subexpression that aquires the data on which the further subexpressions operate. The search is followed by an arbitrary
-number of search modifiers (e.g. sorting, field filtering), aggregations, post-processing instructions and outputs.
-Searches, search modifiers and aggregations are handled completely by ElasticSearch, postprocessing and output is EESQL
-functionality. The output of the last search, aggregation or post-processing module is fanned out to an arbitrary number
-of output modules that can be stored/shown parallel.
+Each part in an EQUEL expression is called subexpression. All EQUEL expression begin with exactly one search
+subexpression that may be an Elasticsearch query string. The search is followed by an arbitrary number of search
+modifiers (e.g. sorting, field filtering), aggregations, post-processing instructions and outputs.  Searches, search
+modifiers and aggregations are handled completely by Elasticsearch, postprocessing and output is EQUEL functionality.
+The output of the last search, aggregation or post-processing module is fanned out to an arbitrary number of output
+modules that can be stored/shown parallel.
 
 ### General Subexpression Syntax
 
@@ -43,7 +56,8 @@ type verb switch\_1 ... parameter\_1=value\_1 ...
 
 The type defines the type of the rule: filter, agg, postproc and output. The first subexpression from a new type must be
 prepended with this keyword for disambiguation reasons. A verb refers to a plugin, which is a piece of code that follows
-some interface conventions. 
+some interface conventions. The first subexpression is recognized as Elasticsearch query string if it doesn't starts
+with a whitelisted verb or shortcut character (+ and - are not whitelisted, see below).
 
 A subexpression can be expressed as a shortcut. Each rule type class can define a plugin that handles such shortcut
 expressions. A shortcut expression is prefixed with one of these characters: `:&<>!#+-` (default should be the colon)
@@ -95,18 +109,13 @@ Unnamed lists are also supported:
 
 #### Search Expression
 
-The verbs match to the query clauses from [ElasticSearch Query
+The verbs match to the query clauses from [Elasticsearch Query
 DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html). Some shortcuts and syntactic
-elements were added for simplification of EESQL expressions, these are:
+elements were added for simplification of EQUEL expressions, these are:
 
-* Boolean operators &, | and ! to build *bool* compound queries.
-* Grouping operator ( and )
-* Starting a search expression with a colon causes that it is treated as ElasticSearch query string. `:"some query"` is
+* Automatic recognition of search as Elasticsearch query string if first word is not a whitelisted EQUEL verb.
+* Starting a search expression with a colon causes that it is treated as Elasticsearch query string. `:"some query"` is
   equivalent to `query_string query="some query"`.
-
-#### Filter Expression
-
-Filter rules are the same as search rules prefixed with the word *filter*.
 
 #### Aggregation Expression
 
@@ -132,15 +141,15 @@ These expressions simply follow the syntax stated above.
 
 ### Plugins
 
-EESQL is implemented in a plugin architecture. Plugins can register for a verb which is then used in EESQL expressions
+EQUEL is implemented in a plugin architecture. Plugins can register for a verb which is then used in EQUEL expressions
 to address the plugin. The following plugin types are specified according to the expression syntax and semantics defined
 above:
 
 * search/search modifier plugin: generates a query DSL expression
-* aggregation plugin: adds/nests an aggregation expression to a ElasticSearch Query DSL query.
-* postprocessing plugin: gets an ElasticSearch result tree, modifies it and passes it to the next postprocessing module or to
+* aggregation plugin: adds/nests an aggregation expression to a Elasticsearch Query DSL query.
+* postprocessing plugin: gets an Elasticsearch result tree, modifies it and passes it to the next postprocessing module or to
   all following output modules.
-* output plugin: gets an ElasticSearch result tree and outputs it
+* output plugin: gets an Elasticsearch result tree and outputs it
 
 Parameters are passed as follows to the plugin:
 
@@ -178,6 +187,8 @@ the same task.
 ### Post-processing modules
 
 * Aggregation of separate start/stop events into one event that combines both attributes.
+* Mapping of values from documents returned by Elasticsearch to values from a database, e.g. Windows EventIDs to
+  descriptions, IPs to hostnames.
 * Find similar events around a specified event class (e.g. similar attacker activity around characteristic login events
   or command line invocations)
 
@@ -185,12 +196,13 @@ the same task.
 
 * Interactive HTML
 * Graphical diagrams
+    * Relationsip diagrams, e.g. communication between hosts, process dependencies.
 * Textual tables
 * Textual documentation
 
 ### Search Reusing Previous Results
 
-Search expressions in a later position that use results from previous EESQL subexpressions.
+Search expressions in a later position that use results from previous EQUEL subexpressions.
 
 Example: search for spawning command line interpreters from uncommon processes and use session identifier to display
 actions performed in the spawned shells.
@@ -217,5 +229,12 @@ Remove agg, postproc and output keywords from first subexpression with a new typ
 
 ### Web Frontend
 
-A web application as fronted for EESQL that displays results and offers graphical visualization capabilities by
+A web application as fronted for EQUEL that displays results and offers graphical visualization capabilities by
 additional output plugins. Should be a separate project.
+
+## Credits
+
+* Florian Roth ([@Cyb3rOps](https://twitter.com/Cyb3rOps)) for
+    * Many valuable suggestions and feedback
+    * The fancy logo
+* Ralf Glauberman for giving it the *EQUEL* name

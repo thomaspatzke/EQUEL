@@ -1,27 +1,27 @@
 from elasticsearch_dsl import Search, Q, A
 from antlr4 import CommonTokenStream, ParseTreeWalker
-from eesql.ant.eesqlLexer import eesqlLexer
-from eesql.ant.eesqlParser import eesqlParser
-from eesql.ant.eesqlParserListener import eesqlParserListener
-from eesql.plugins.params import Parameter, ParameterList
+from equel.ant.equelLexer import equelLexer
+from equel.ant.equelParser import equelParser
+from equel.ant.equelParserListener import equelParserListener
+from equel.plugins.params import Parameter, ParameterList
 
-class EESQLParser():
-    """Parser builds elasticsearch_dsl Search object from EESQL query expression"""
+class EQUELParser():
+    """Parser builds elasticsearch_dsl Search object from EQUEL query expression"""
     def __init__(self, engine):
-        """Initialize EESQL parser"""
+        """Initialize EQUEL parser"""
         self.engine = engine
 
-    def parse(self, eesql):
-        lexer = eesqlLexer(eesql)
+    def parse(self, equel):
+        lexer = equelLexer(equel)
         tokenstream = CommonTokenStream(lexer)
-        parser = eesqlParser(tokenstream)
-        parsetree = parser.eesql()
+        parser = equelParser(tokenstream)
+        parsetree = parser.equel()
         walker = ParseTreeWalker()
-        listener = EESQLParserListener(self.engine)
+        listener = EQUELParserListener(self.engine)
         walker.walk(listener, parsetree)
         return parsetree
 
-class EESQLParserListener(eesqlParserListener):
+class EQUELParserListener(equelParserListener):
     def __init__(self, engine):
         self.engine = engine
         self.aggs = AggregationHierarchy()  # aggregation symbol table that contains all aggregation names with aggregation references
@@ -30,7 +30,7 @@ class EESQLParserListener(eesqlParserListener):
         super().__init__()
 
     # Main rule
-    def exitEesql(self, ctx):
+    def exitEquel(self, ctx):
         ctx.query = ctx.firstExpr().json
         for searchExpr in ctx.searchExpr():
             ctx.query.update(searchExpr.json)

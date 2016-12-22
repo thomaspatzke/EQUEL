@@ -1,5 +1,5 @@
 # Aggregation Plugins
-from .generic import BasePlugin, GenericPlugin, BaseShortcutPlugin, EESQLPluginException
+from .generic import BasePlugin, GenericPlugin, BaseShortcutPlugin, EQUELPluginException
 
 class AggregationShortcutPlugin(BaseShortcutPlugin):
     """

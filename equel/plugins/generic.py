@@ -1,6 +1,6 @@
 # Generic plugins
 
-class EESQLPluginException(ValueError):
+class EQUELPluginException(ValueError):
     """This exception is raised when a plugin fails in processing of an expression"""
     pass
 
@@ -17,7 +17,7 @@ class BasePlugin:
         """
         Called every time the plugin is used and should return the expected return a dict that is merged into the request for search and aggregation plugins.
         The following parameters are passed:
-        * the verb from the EESQL expression
+        * the verb from the EQUEL expression
         * a dict of parameters
         * the current aggregations object
         """
@@ -37,9 +37,9 @@ class BaseShortcutPlugin:
         pass
 
 class GenericPlugin(BasePlugin):
-    """Generic EESQL to JSON conversion, e.g. verb p1=v1 p2=v2 -> {"verb": {"p1": "v1", "p2": "v2" }}"""
+    """Generic EQUEL to JSON conversion, e.g. verb p1=v1 p2=v2 -> {"verb": {"p1": "v1", "p2": "v2" }}"""
     name = "Generic Plugin"
-    description = "Generic EESQL to JSON conversion"
+    description = "Generic EQUEL to JSON conversion"
 
     def apply(self, verb, params, aggs):
         return { verb: params.toJSON() }

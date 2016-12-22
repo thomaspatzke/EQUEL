@@ -1,4 +1,4 @@
-lexer grammar eesqlLexer ;
+lexer grammar equelLexer ;
 //options { language=Python3; }
 
 // Initial mode tries to detect EQUEL expression by whitelisted prefix character or verb keyword.

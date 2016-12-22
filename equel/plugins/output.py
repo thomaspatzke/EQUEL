@@ -1,5 +1,5 @@
 # Output Plugins
-from .generic import EESQLPluginException
+from .generic import EQUELPluginException
 import json
 import re
 
@@ -12,8 +12,8 @@ class BaseOutputPlugin:
         """
         The following parameters are passed to this method:
 
-        * the verb from the EESQL expression as string
-        * the parameters from the EESQL expression as dict (name->value)
+        * the verb from the EQUEL expression as string
+        * the parameters from the EQUEL expression as dict (name->value)
 
         All parameters are stored in params dict. If parameter from expected params is missing, it is stored with the given default value
         """

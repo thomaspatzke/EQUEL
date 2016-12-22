@@ -1,10 +1,10 @@
 # Search Plugins
-from .generic import BasePlugin, GenericPlugin, BaseShortcutPlugin, EESQLPluginException
+from .generic import BasePlugin, GenericPlugin, BaseShortcutPlugin, EQUELPluginException
 
 class GenericSearchPlugin(GenericPlugin):
-    """Convert EESQL into JSON and wrap into query attribute"""
+    """Convert EQUEL into JSON and wrap into query attribute"""
     name = "Generic Search Plugin"
-    description = "Generic EESQL to JSON conversion with wrapping into query attribute"
+    description = "Generic EQUEL to JSON conversion with wrapping into query attribute"
 
     def apply(self, verb, params, aggs):
         return { "query": super().apply(verb, params) }
@@ -56,12 +56,12 @@ class SortPlugin(BasePlugin):
         try:
             fields = params["unnamed_list"]
         except KeyError:
-            raise EESQLPluginException("Expression 'sort' requires list of fields")
+            raise EQUELPluginException("Expression 'sort' requires list of fields")
 
         if len(fields) == 0:
-            raise EESQLPluginException("List of fields of sort expression must not be empty")
+            raise EQUELPluginException("List of fields of sort expression must not be empty")
         elif type(fields[0]) == list:
-            raise EESQLPluginException("Only one list of fields in sort expression is allowed")
+            raise EQUELPluginException("Only one list of fields in sort expression is allowed")
 
         for field in fields:
             self.appendField(field)
@@ -89,7 +89,7 @@ class FieldFilterPlugin(BasePlugin):
             exclude = None
 
         if include and len(include) > 0 and type(include[0]) == list or exclude and len(exclude) > 0 and type(exclude[0]) == list:
-            raise EESQLPluginException("Only one list of fields in fields expression is allowed")
+            raise EQUELPluginException("Only one list of fields in fields expression is allowed")
 
         if not include and not exclude:
             return {}
