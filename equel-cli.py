@@ -2,6 +2,11 @@
 # Command line interface to compile ElasticSearch queries from EQUEL expressions and perform queries against an ES instance.
 
 import argparse
+
+# change default decoding error behaviour to less strict 'replace', globally
+import codecs
+codecs.register_error('strict', codecs.replace_errors)
+
 from elasticsearch import Elasticsearch
 from equel.engine import EQUELEngine
 import json
