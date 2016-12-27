@@ -100,3 +100,16 @@ class FieldFilterPlugin(BasePlugin):
         if exclude:
             filters["exclude"] = exclude
         return { "_source": filters }
+
+class NestQueryPlugin(BasePlugin):
+    """Wrap current query into nested query"""
+    name = "Nest current query"
+    description = "Wraps current query into nested query"
+
+    def apply(self, verb, params, parser, ctx):
+        if 'path' not in params:
+            raise EQUELPluginException("Search subquery 'nest' requires path parameter")
+        query = parser.query['query']
+        query = { 'nested': { 'path': params['path'], 'query': query } }
+        parser.query['query'] = query
+        return {}
