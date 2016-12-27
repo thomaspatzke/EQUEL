@@ -7,7 +7,7 @@ class GenericSearchPlugin(GenericPlugin):
     description = "Generic EQUEL to JSON conversion with wrapping into query attribute"
 
     def apply(self, verb, params, parser, ctx):
-        return { "query": super().apply(verb, params) }
+        return { "query": super().apply(verb, params, parser, ctx) }
 
 class ESQueryStringPlugin(BasePlugin):
     """Convert Elasticsearch query string into Query DSL structure"""

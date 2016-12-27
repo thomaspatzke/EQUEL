@@ -24,6 +24,7 @@ class EQUELParser():
 class EQUELParserListener(equelParserListener):
     def __init__(self, engine):
         self.engine = engine
+        self.query = dict()
         self.aggs = AggregationHierarchy()  # aggregation symbol table that contains all aggregation names with aggregation references
         self.postproc = PostprocessingChain()
         self.output = Outputs()
@@ -39,9 +40,6 @@ class EQUELParserListener(equelParserListener):
     # Expressions
     def exitSearchExpr(self, ctx):
         self.query.update(ctx.genericExpr().json)
-
-    def exitFirstSearchExpr(self, ctx):
-        self.query = ctx.searchExpr().json
 
     def exitQueryStringExpr(self, ctx):
         plugin = self.engine.resolveQueryStringPlugin()
