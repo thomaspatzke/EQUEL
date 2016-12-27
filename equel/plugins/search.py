@@ -6,7 +6,7 @@ class GenericSearchPlugin(GenericPlugin):
     name = "Generic Search Plugin"
     description = "Generic EQUEL to JSON conversion with wrapping into query attribute"
 
-    def apply(self, verb, params, aggs):
+    def apply(self, verb, params, parser, ctx):
         return { "query": super().apply(verb, params) }
 
 class ESQueryStringPlugin(BasePlugin):
@@ -14,7 +14,7 @@ class ESQueryStringPlugin(BasePlugin):
     name = "Elasticsearch Query String Plugin"
     description = "Convert Elasticsearch query string into Query DSL structure"
 
-    def apply(self, verb, query, aggs):
+    def apply(self, verb, query, parser, ctx):
         return { "query": { "query_string": { "query": query } } }
 
 class SearchShortcutPlugin(BaseShortcutPlugin):
@@ -26,7 +26,7 @@ class SearchShortcutPlugin(BaseShortcutPlugin):
     name = "Search shortcut plugin"
     description = "Convert value into query_string query"
 
-    def apply(self, prefix, value, aggs):
+    def apply(self, prefix, value, parser, ctx):
         res = { "query_string": { "query": value } }
         if prefix == "&":
             res["query_string"]["default_operator"] = "AND"
@@ -52,7 +52,7 @@ class SortPlugin(BasePlugin):
         else:
             self.sortfields.append(field)
 
-    def apply(self, verb, params, aggs):
+    def apply(self, verb, params, parser, ctx):
         try:
             fields = params["unnamed_list"]
         except KeyError:
@@ -77,7 +77,7 @@ class FieldFilterPlugin(BasePlugin):
     name = "Filter fields from search result plugin"
     description = "Filters fields from search result documents"
 
-    def apply(self, verb, params, aggs):
+    def apply(self, verb, params, parser, ctx):
         try:
             include = params["unnamed_list"]
         except KeyError:

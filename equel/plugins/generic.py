@@ -13,13 +13,14 @@ class BasePlugin:
         """Constructor"""
         pass
 
-    def apply(self, verb, params, aggs):
+    def apply(self, verb, params, parser, ctx):
         """
         Called every time the plugin is used and should return the expected return a dict that is merged into the request for search and aggregation plugins.
         The following parameters are passed:
         * the verb from the EQUEL expression
         * a dict of parameters
-        * the current aggregations object
+        * the current parser object
+        * the parsing context of the parse tree node that triggered plugin invocation
         """
         pass
 
@@ -32,7 +33,7 @@ class BaseShortcutPlugin:
         """Constructor"""
         pass
 
-    def apply(verb, prefix, value, aggs):
+    def apply(verb, prefix, value, parser, ctx):
         """Called every time the plugin is used and should return a dict"""
         pass
 
@@ -41,5 +42,5 @@ class GenericPlugin(BasePlugin):
     name = "Generic Plugin"
     description = "Generic EQUEL to JSON conversion"
 
-    def apply(self, verb, params, aggs):
+    def apply(self, verb, params, parser, ctx):
         return { verb: params.toJSON() }

@@ -8,7 +8,7 @@ reRemoveIndices = re.compile('\[\d+\]')
 class BaseOutputPlugin:
     """Base class for output plugins"""
     _expectedParams = ()    # list of expected params as (name, default_value) tuples for storage of params dict
-    def apply(self, verb, params, _):
+    def apply(self, verb, params, parser, ctx):
         """
         The following parameters are passed to this method:
 
@@ -63,10 +63,10 @@ class TextOutputPlugin(BaseOutputPlugin):
                 ("condensed", False),
             )
 
-    def apply(self, verb, params, _):
+    def apply(self, verb, params, parser, ctx):
         """Parameter postprocessing"""
         print(params)
-        super().apply(verb, params, _)
+        super().apply(verb, params, parser, ctx)
         if type(self.params['fields']) == str:
             self.params['fields'] = [self.params['fields']]
         if type(self.params['exclude']) == str:

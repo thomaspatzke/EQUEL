@@ -31,23 +31,21 @@ class EQUELParserListener(equelParserListener):
 
     # Main rule
     def exitEquel(self, ctx):
-        ctx.query = ctx.firstExpr().json
-        for searchExpr in ctx.searchExpr():
-            ctx.query.update(searchExpr.json)
+        ctx.query = self.query
         ctx.query.update(self.aggs.getJSON())
         ctx.postproc = self.postproc
         ctx.output = self.output
 
     # Expressions
     def exitSearchExpr(self, ctx):
-        ctx.json = ctx.genericExpr().json
+        self.query.update(ctx.genericExpr().json)
 
     def exitFirstSearchExpr(self, ctx):
-        ctx.json = ctx.searchExpr().json
+        self.query = ctx.searchExpr().json
 
     def exitQueryStringExpr(self, ctx):
         plugin = self.engine.resolveQueryStringPlugin()
-        ctx.json = plugin.apply(None, ctx.queryString().query, None)
+        self.query = plugin.apply(None, ctx.queryString().query, self, ctx)
 
     def exitQueryString(self, ctx):
         ctx.query = "".join([qsc.getText() for qsc in ctx.QueryStringChar()])
@@ -83,7 +81,7 @@ class EQUELParserListener(equelParserListener):
         verb = ctx.verb().text
         params = ParameterList(ctx.parameter())
         plugin = self.engine.resolvePlugin(type, verb)
-        ctx.json = plugin.apply(verb, params, self.aggs)    # TODO: name 'json' does not match, as it contains dicts or output plugin objects
+        ctx.json = plugin.apply(verb, params, self, ctx)    # TODO: name 'json' does not match, as it contains dicts or output plugin objects
 
     def exitShortcut(self, ctx):
         type = self.engine.getPluginTypeForContext(ctx.parentCtx)

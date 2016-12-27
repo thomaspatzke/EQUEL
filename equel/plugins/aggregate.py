@@ -15,7 +15,7 @@ class AggregationShortcutPlugin(BaseShortcutPlugin):
             "#": ("value_count", "field"),
             }
 
-    def apply(self, prefix, value, aggs):
+    def apply(self, prefix, value, parser, ctx):
         return { self.translation[prefix][0]: { self.translation[prefix][1]: value } }
 
 class AggregationKeywordsPlugin(BasePlugin):
@@ -32,6 +32,6 @@ class AggregationKeywordsPlugin(BasePlugin):
             "valuecount": ("value_count", "field"),
             }
 
-    def apply(self, verb, params, aggs):
+    def apply(self, verb, params, parser, ctx):
         for field in params.flags:
-            aggs.add(None, { self.translation[verb][0]: { self.translation[verb][1]: field } })
+            parser.aggs.add(None, { self.translation[verb][0]: { self.translation[verb][1]: field } })
