@@ -1,0 +1,13 @@
+{
+  "query": {
+    "multi_match": {
+      "query": "foobar",
+      "fields": [
+        "foo",
+        "bar",
+        "bla",
+        "blubb"
+      ]
+    }
+  }
+}

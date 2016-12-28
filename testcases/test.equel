@@ -1,1 +1,0 @@
-query_string query="test:val AND foo:bar" | filter :"foo AND bar" | agg min field=value as minimum | max field='value' as maximum | postproc test | output fancyhtml interactive type="html5"

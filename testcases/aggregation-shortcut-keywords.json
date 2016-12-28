@@ -1,0 +1,8 @@
+{
+  "query": {
+    "query_string": {
+      "query": "EventID:4625 LogonType:3",
+      "default_operator": "AND"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "query": {
+    "query_string": {
+      "query": "EventID:4625 AND NOT ComputerName:(foo bar)"
+    }
+  },
+  "aggs": {
+    "computer": {
+      "aggs": {
+        "agg3": {
+          "value_count": {
+            "field": "TargetUserName"
+          }
+        },
+        "computer_user": {
+          "aggs": {
+            "agg1": {
+              "aggs": {
+                "agg2": {
+                  "max": {
+                    "field": "@timestamp"
+                  }
+                }
+              },
+              "min": {
+                "field": "@timestamp"
+              }
+            }
+          },
+          "terms": {
+            "field": "TargetUserName"
+          }
+        }
+      },
+      "terms": {
+        "field": "ComputerName"
+      }
+    },
+    "agg4": {
+      "aggs": {
+        "agg5": {
+          "value_count": {
+            "field": "ComputerName"
+          }
+        }
+      },
+      "terms": {
+        "field": "TargetUserName"
+      }
+    }
+  }
+}

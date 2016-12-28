@@ -1,0 +1,7 @@
+{
+  "query": {
+    "query_string": {
+      "query": "nested path=response.header query=(bool must=[(match response.header.name=x-xss-protection), (match response.header.name=x-frame-options), (match response.header.name=x-content-type-options)])"
+    }
+  }
+}

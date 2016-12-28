@@ -1,0 +1,9 @@
+{
+  "query": {
+    "query_string": {
+      "query": "test:val foo:bar",
+      "default_operator": "AND",
+      "lenient": true
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "_source": {
+    "include": [
+      "@timestamp",
+      "ComputerName",
+      "TargetDomainName",
+      "TargetUsername"
+    ]
+  },
+  "sort": [
+    "ComputerName",
+    "TargetDomainName",
+    "TargetUsername",
+    {
+      "@timestamp": {
+        "order": "desc"
+      }
+    }
+  ],
+  "query": {
+    "query_string": {
+      "default_operator": "AND",
+      "query": "EventID:4624 LogonType:3"
+    }
+  }
+}
