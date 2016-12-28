@@ -11,6 +11,9 @@ class Parameter:
         self.value = value
         if value == None:   # Flag parameter
             self.type = self.PARAM_FLAG
+        elif key == None and type(value) == str:
+            self.type = self.PARAM_KV
+            self.key = "unnamed"
         elif key == None and type(value) == list:
             self.type = self.PARAM_LIST
             self.key = "unnamed_list"

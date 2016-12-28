@@ -113,3 +113,21 @@ class NestQueryPlugin(BasePlugin):
         query = { 'nested': { 'path': params['path'], 'query': query } }
         parser.query['query'] = query
         return {}
+
+class ScriptQueryPlugin(BasePlugin):
+    """Perform a script query"""
+    name = "Script query"
+    description = "Perform a script query (default: painless)"
+
+    def apply(self, verb, params, parser, ctx):
+        print(params)
+        if 'unnamed' not in params:
+            raise EQUELPluginException("Search subquery 'script' requires a script as unnamed parameter")
+        script = params['unnamed']
+
+        try:
+            lang = params['lang']
+        except KeyError:
+            lang = "painless"
+
+        return { "script": { "script": { "lang": lang, "inline": script } } }

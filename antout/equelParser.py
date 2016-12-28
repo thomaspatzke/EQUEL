@@ -6,7 +6,7 @@ from io import StringIO
 def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\25")
-        buf.write("\u009f\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\u00a0\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\3\2\3\2\3\2\7\2\"\n\2\f\2\16\2%\13\2\3")
         buf.write("\2\3\2\3\2\3\2\3\2\7\2,\n\2\f\2\16\2/\13\2\5\2\61\n\2")
@@ -16,52 +16,53 @@ def serializedATN():
         buf.write("\3\5\3\5\3\6\6\6Z\n\6\r\6\16\6[\3\7\3\7\5\7`\n\7\3\b\3")
         buf.write("\b\3\t\3\t\5\tf\n\t\3\t\3\t\3\t\5\tk\n\t\3\n\3\n\3\13")
         buf.write("\3\13\3\13\5\13r\n\13\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r")
-        buf.write("\3\r\3\r\3\r\7\r\177\n\r\f\r\16\r\u0082\13\r\3\r\3\r\3")
-        buf.write("\r\5\r\u0087\n\r\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3")
-        buf.write("\17\3\17\3\17\3\17\3\17\3\17\7\17\u0096\n\17\f\17\16\17")
-        buf.write("\u0099\13\17\3\17\3\17\5\17\u009d\n\17\3\17\2\2\20\2\4")
-        buf.write("\6\b\n\f\16\20\22\24\26\30\32\34\2\2\u00a6\2\36\3\2\2")
-        buf.write("\2\4J\3\2\2\2\6T\3\2\2\2\bV\3\2\2\2\nY\3\2\2\2\f_\3\2")
-        buf.write("\2\2\16a\3\2\2\2\20e\3\2\2\2\22l\3\2\2\2\24n\3\2\2\2\26")
-        buf.write("s\3\2\2\2\30\u0086\3\2\2\2\32\u0088\3\2\2\2\34\u009c\3")
-        buf.write("\2\2\2\36#\5\f\7\2\37 \7\b\2\2 \"\5\b\5\2!\37\3\2\2\2")
-        buf.write("\"%\3\2\2\2#!\3\2\2\2#$\3\2\2\2$\60\3\2\2\2%#\3\2\2\2")
-        buf.write("&\'\7\b\2\2\'(\7\5\2\2(-\5\20\t\2)*\7\b\2\2*,\5\20\t\2")
-        buf.write("+)\3\2\2\2,/\3\2\2\2-+\3\2\2\2-.\3\2\2\2.\61\3\2\2\2/")
-        buf.write("-\3\2\2\2\60&\3\2\2\2\60\61\3\2\2\2\61<\3\2\2\2\62\63")
-        buf.write("\7\b\2\2\63\64\7\6\2\2\649\5\22\n\2\65\66\7\b\2\2\668")
-        buf.write("\5\22\n\2\67\65\3\2\2\28;\3\2\2\29\67\3\2\2\29:\3\2\2")
-        buf.write("\2:=\3\2\2\2;9\3\2\2\2<\62\3\2\2\2<=\3\2\2\2=H\3\2\2\2")
-        buf.write(">?\7\b\2\2?@\7\7\2\2@E\5\24\13\2AB\7\b\2\2BD\5\24\13\2")
-        buf.write("CA\3\2\2\2DG\3\2\2\2EC\3\2\2\2EF\3\2\2\2FI\3\2\2\2GE\3")
-        buf.write("\2\2\2H>\3\2\2\2HI\3\2\2\2I\3\3\2\2\2JK\7\f\2\2K\5\3\2")
-        buf.write("\2\2LP\5\4\3\2MO\5\30\r\2NM\3\2\2\2OR\3\2\2\2PN\3\2\2")
-        buf.write("\2PQ\3\2\2\2QU\3\2\2\2RP\3\2\2\2SU\5\26\f\2TL\3\2\2\2")
-        buf.write("TS\3\2\2\2U\7\3\2\2\2VW\5\6\4\2W\t\3\2\2\2XZ\7\3\2\2Y")
-        buf.write("X\3\2\2\2Z[\3\2\2\2[Y\3\2\2\2[\\\3\2\2\2\\\13\3\2\2\2")
-        buf.write("]`\5\b\5\2^`\5\n\6\2_]\3\2\2\2_^\3\2\2\2`\r\3\2\2\2ab")
-        buf.write("\5\b\5\2b\17\3\2\2\2cd\7\5\2\2df\7\f\2\2ec\3\2\2\2ef\3")
-        buf.write("\2\2\2fg\3\2\2\2gj\5\6\4\2hi\7\4\2\2ik\7\f\2\2jh\3\2\2")
-        buf.write("\2jk\3\2\2\2k\21\3\2\2\2lm\5\6\4\2m\23\3\2\2\2nq\5\6\4")
-        buf.write("\2op\7\4\2\2pr\7\f\2\2qo\3\2\2\2qr\3\2\2\2r\25\3\2\2\2")
-        buf.write("st\7\13\2\2tu\5\34\17\2u\27\3\2\2\2vw\5\32\16\2wx\7\n")
-        buf.write("\2\2xy\5\34\17\2y\u0087\3\2\2\2z{\7\20\2\2{\u0080\5\34")
-        buf.write("\17\2|}\7\21\2\2}\177\5\34\17\2~|\3\2\2\2\177\u0082\3")
-        buf.write("\2\2\2\u0080~\3\2\2\2\u0080\u0081\3\2\2\2\u0081\u0083")
-        buf.write("\3\2\2\2\u0082\u0080\3\2\2\2\u0083\u0084\7\22\2\2\u0084")
-        buf.write("\u0087\3\2\2\2\u0085\u0087\7\f\2\2\u0086v\3\2\2\2\u0086")
-        buf.write("z\3\2\2\2\u0086\u0085\3\2\2\2\u0087\31\3\2\2\2\u0088\u0089")
-        buf.write("\7\f\2\2\u0089\33\3\2\2\2\u008a\u009d\7\25\2\2\u008b\u009d")
-        buf.write("\7\23\2\2\u008c\u009d\7\24\2\2\u008d\u008e\7\17\2\2\u008e")
-        buf.write("\u008f\5\b\5\2\u008f\u0090\7\t\2\2\u0090\u009d\3\2\2\2")
-        buf.write("\u0091\u0092\7\20\2\2\u0092\u0097\5\34\17\2\u0093\u0094")
-        buf.write("\7\21\2\2\u0094\u0096\5\34\17\2\u0095\u0093\3\2\2\2\u0096")
-        buf.write("\u0099\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0098\3\2\2\2")
-        buf.write("\u0098\u009a\3\2\2\2\u0099\u0097\3\2\2\2\u009a\u009b\7")
-        buf.write("\22\2\2\u009b\u009d\3\2\2\2\u009c\u008a\3\2\2\2\u009c")
-        buf.write("\u008b\3\2\2\2\u009c\u008c\3\2\2\2\u009c\u008d\3\2\2\2")
-        buf.write("\u009c\u0091\3\2\2\2\u009d\35\3\2\2\2\24#-\609<EHPT[_")
-        buf.write("ejq\u0080\u0086\u0097\u009c")
+        buf.write("\3\r\3\r\3\r\3\r\7\r\u0080\n\r\f\r\16\r\u0083\13\r\3\r")
+        buf.write("\3\r\3\r\5\r\u0088\n\r\3\16\3\16\3\17\3\17\3\17\3\17\3")
+        buf.write("\17\3\17\3\17\3\17\3\17\3\17\3\17\7\17\u0097\n\17\f\17")
+        buf.write("\16\17\u009a\13\17\3\17\3\17\5\17\u009e\n\17\3\17\2\2")
+        buf.write("\20\2\4\6\b\n\f\16\20\22\24\26\30\32\34\2\2\u00a8\2\36")
+        buf.write("\3\2\2\2\4J\3\2\2\2\6T\3\2\2\2\bV\3\2\2\2\nY\3\2\2\2\f")
+        buf.write("_\3\2\2\2\16a\3\2\2\2\20e\3\2\2\2\22l\3\2\2\2\24n\3\2")
+        buf.write("\2\2\26s\3\2\2\2\30\u0087\3\2\2\2\32\u0089\3\2\2\2\34")
+        buf.write("\u009d\3\2\2\2\36#\5\f\7\2\37 \7\b\2\2 \"\5\b\5\2!\37")
+        buf.write("\3\2\2\2\"%\3\2\2\2#!\3\2\2\2#$\3\2\2\2$\60\3\2\2\2%#")
+        buf.write("\3\2\2\2&\'\7\b\2\2\'(\7\5\2\2(-\5\20\t\2)*\7\b\2\2*,")
+        buf.write("\5\20\t\2+)\3\2\2\2,/\3\2\2\2-+\3\2\2\2-.\3\2\2\2.\61")
+        buf.write("\3\2\2\2/-\3\2\2\2\60&\3\2\2\2\60\61\3\2\2\2\61<\3\2\2")
+        buf.write("\2\62\63\7\b\2\2\63\64\7\6\2\2\649\5\22\n\2\65\66\7\b")
+        buf.write("\2\2\668\5\22\n\2\67\65\3\2\2\28;\3\2\2\29\67\3\2\2\2")
+        buf.write("9:\3\2\2\2:=\3\2\2\2;9\3\2\2\2<\62\3\2\2\2<=\3\2\2\2=")
+        buf.write("H\3\2\2\2>?\7\b\2\2?@\7\7\2\2@E\5\24\13\2AB\7\b\2\2BD")
+        buf.write("\5\24\13\2CA\3\2\2\2DG\3\2\2\2EC\3\2\2\2EF\3\2\2\2FI\3")
+        buf.write("\2\2\2GE\3\2\2\2H>\3\2\2\2HI\3\2\2\2I\3\3\2\2\2JK\7\f")
+        buf.write("\2\2K\5\3\2\2\2LP\5\4\3\2MO\5\30\r\2NM\3\2\2\2OR\3\2\2")
+        buf.write("\2PN\3\2\2\2PQ\3\2\2\2QU\3\2\2\2RP\3\2\2\2SU\5\26\f\2")
+        buf.write("TL\3\2\2\2TS\3\2\2\2U\7\3\2\2\2VW\5\6\4\2W\t\3\2\2\2X")
+        buf.write("Z\7\3\2\2YX\3\2\2\2Z[\3\2\2\2[Y\3\2\2\2[\\\3\2\2\2\\\13")
+        buf.write("\3\2\2\2]`\5\b\5\2^`\5\n\6\2_]\3\2\2\2_^\3\2\2\2`\r\3")
+        buf.write("\2\2\2ab\5\b\5\2b\17\3\2\2\2cd\7\5\2\2df\7\f\2\2ec\3\2")
+        buf.write("\2\2ef\3\2\2\2fg\3\2\2\2gj\5\6\4\2hi\7\4\2\2ik\7\f\2\2")
+        buf.write("jh\3\2\2\2jk\3\2\2\2k\21\3\2\2\2lm\5\6\4\2m\23\3\2\2\2")
+        buf.write("nq\5\6\4\2op\7\4\2\2pr\7\f\2\2qo\3\2\2\2qr\3\2\2\2r\25")
+        buf.write("\3\2\2\2st\7\13\2\2tu\5\34\17\2u\27\3\2\2\2vw\5\32\16")
+        buf.write("\2wx\7\n\2\2xy\5\34\17\2y\u0088\3\2\2\2z\u0088\5\34\17")
+        buf.write("\2{|\7\20\2\2|\u0081\5\34\17\2}~\7\21\2\2~\u0080\5\34")
+        buf.write("\17\2\177}\3\2\2\2\u0080\u0083\3\2\2\2\u0081\177\3\2\2")
+        buf.write("\2\u0081\u0082\3\2\2\2\u0082\u0084\3\2\2\2\u0083\u0081")
+        buf.write("\3\2\2\2\u0084\u0085\7\22\2\2\u0085\u0088\3\2\2\2\u0086")
+        buf.write("\u0088\7\f\2\2\u0087v\3\2\2\2\u0087z\3\2\2\2\u0087{\3")
+        buf.write("\2\2\2\u0087\u0086\3\2\2\2\u0088\31\3\2\2\2\u0089\u008a")
+        buf.write("\7\f\2\2\u008a\33\3\2\2\2\u008b\u009e\7\25\2\2\u008c\u009e")
+        buf.write("\7\23\2\2\u008d\u009e\7\24\2\2\u008e\u008f\7\17\2\2\u008f")
+        buf.write("\u0090\5\b\5\2\u0090\u0091\7\t\2\2\u0091\u009e\3\2\2\2")
+        buf.write("\u0092\u0093\7\20\2\2\u0093\u0098\5\34\17\2\u0094\u0095")
+        buf.write("\7\21\2\2\u0095\u0097\5\34\17\2\u0096\u0094\3\2\2\2\u0097")
+        buf.write("\u009a\3\2\2\2\u0098\u0096\3\2\2\2\u0098\u0099\3\2\2\2")
+        buf.write("\u0099\u009b\3\2\2\2\u009a\u0098\3\2\2\2\u009b\u009c\7")
+        buf.write("\22\2\2\u009c\u009e\3\2\2\2\u009d\u008b\3\2\2\2\u009d")
+        buf.write("\u008c\3\2\2\2\u009d\u008d\3\2\2\2\u009d\u008e\3\2\2\2")
+        buf.write("\u009d\u0092\3\2\2\2\u009e\35\3\2\2\2\24#-\609<EHPT[_")
+        buf.write("ejq\u0081\u0087\u0098\u009d")
         return buf.getvalue()
 
 
@@ -442,7 +443,7 @@ class equelParser ( Parser ):
                 self.state = 78
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==equelParser.Identifier or _la==equelParser.LParL:
+                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << equelParser.Identifier) | (1 << equelParser.LParS) | (1 << equelParser.LParL) | (1 << equelParser.SingleQuotedValue) | (1 << equelParser.DoubleQuotedValue) | (1 << equelParser.UnquotedValue))) != 0):
                     self.state = 75
                     self.parameter()
                     self.state = 80
@@ -970,6 +971,31 @@ class equelParser ( Parser ):
 
 
 
+    class UnnamedValueContext(ParameterContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ParameterContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def value(self):
+            return self.getTypedRuleContext(equelParser.ValueContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterUnnamedValue" ):
+                listener.enterUnnamedValue(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitUnnamedValue" ):
+                listener.exitUnnamedValue(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitUnnamedValue" ):
+                return visitor.visitUnnamedValue(self)
+            else:
+                return visitor.visitChildren(self)
+
+
     class SingleParamContext(ParameterContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a equelParser.ParameterContext
@@ -1068,7 +1094,7 @@ class equelParser ( Parser ):
         self.enterRule(localctx, 22, self.RULE_parameter)
         self._la = 0 # Token type
         try:
-            self.state = 132
+            self.state = 133
             la_ = self._interp.adaptivePredict(self._input,15,self._ctx)
             if la_ == 1:
                 localctx = equelParser.KVParamContext(self, localctx)
@@ -1082,32 +1108,39 @@ class equelParser ( Parser ):
                 pass
 
             elif la_ == 2:
-                localctx = equelParser.UnnamedListContext(self, localctx)
+                localctx = equelParser.UnnamedValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
                 self.state = 120
-                self.match(equelParser.LParL)
-                self.state = 121
                 self.value()
-                self.state = 126
-                self._errHandler.sync(self)
-                _la = self._input.LA(1)
-                while _la==equelParser.LSep:
-                    self.state = 122
-                    self.match(equelParser.LSep)
-                    self.state = 123
-                    self.value()
-                    self.state = 128
-                    self._errHandler.sync(self)
-                    _la = self._input.LA(1)
-
-                self.state = 129
-                self.match(equelParser.RParL)
                 pass
 
             elif la_ == 3:
-                localctx = equelParser.SingleParamContext(self, localctx)
+                localctx = equelParser.UnnamedListContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
-                self.state = 131
+                self.state = 121
+                self.match(equelParser.LParL)
+                self.state = 122
+                self.value()
+                self.state = 127
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+                while _la==equelParser.LSep:
+                    self.state = 123
+                    self.match(equelParser.LSep)
+                    self.state = 124
+                    self.value()
+                    self.state = 129
+                    self._errHandler.sync(self)
+                    _la = self._input.LA(1)
+
+                self.state = 130
+                self.match(equelParser.RParL)
+                pass
+
+            elif la_ == 4:
+                localctx = equelParser.SingleParamContext(self, localctx)
+                self.enterOuterAlt(localctx, 4)
+                self.state = 132
                 self.match(equelParser.Identifier)
                 pass
 
@@ -1155,7 +1188,7 @@ class equelParser ( Parser ):
         self.enterRule(localctx, 24, self.RULE_name)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 134
+            self.state = 135
             self.match(equelParser.Identifier)
         except RecognitionException as re:
             localctx.exception = re
@@ -1326,56 +1359,56 @@ class equelParser ( Parser ):
         self.enterRule(localctx, 26, self.RULE_value)
         self._la = 0 # Token type
         try:
-            self.state = 154
+            self.state = 155
             token = self._input.LA(1)
             if token in [equelParser.UnquotedValue]:
                 localctx = equelParser.SimpleUQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 136
+                self.state = 137
                 self.match(equelParser.UnquotedValue)
 
             elif token in [equelParser.SingleQuotedValue]:
                 localctx = equelParser.SimpleSQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 137
+                self.state = 138
                 self.match(equelParser.SingleQuotedValue)
 
             elif token in [equelParser.DoubleQuotedValue]:
                 localctx = equelParser.SimpleDQValueContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
-                self.state = 138
+                self.state = 139
                 self.match(equelParser.DoubleQuotedValue)
 
             elif token in [equelParser.LParS]:
                 localctx = equelParser.NestedSearchContext(self, localctx)
                 self.enterOuterAlt(localctx, 4)
-                self.state = 139
-                self.match(equelParser.LParS)
                 self.state = 140
-                self.searchExpr()
+                self.match(equelParser.LParS)
                 self.state = 141
+                self.searchExpr()
+                self.state = 142
                 self.match(equelParser.RParS)
 
             elif token in [equelParser.LParL]:
                 localctx = equelParser.ValueListContext(self, localctx)
                 self.enterOuterAlt(localctx, 5)
-                self.state = 143
-                self.match(equelParser.LParL)
                 self.state = 144
+                self.match(equelParser.LParL)
+                self.state = 145
                 self.value()
-                self.state = 149
+                self.state = 150
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while _la==equelParser.LSep:
-                    self.state = 145
-                    self.match(equelParser.LSep)
                     self.state = 146
+                    self.match(equelParser.LSep)
+                    self.state = 147
                     self.value()
-                    self.state = 151
+                    self.state = 152
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
 
-                self.state = 152
+                self.state = 153
                 self.match(equelParser.RParL)
 
             else:

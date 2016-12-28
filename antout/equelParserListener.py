@@ -134,6 +134,15 @@ class equelParserListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by equelParser#UnnamedValue.
+    def enterUnnamedValue(self, ctx:equelParser.UnnamedValueContext):
+        pass
+
+    # Exit a parse tree produced by equelParser#UnnamedValue.
+    def exitUnnamedValue(self, ctx:equelParser.UnnamedValueContext):
+        pass
+
+
     # Enter a parse tree produced by equelParser#UnnamedList.
     def enterUnnamedList(self, ctx:equelParser.UnnamedListContext):
         pass

@@ -79,6 +79,11 @@ class equelParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by equelParser#UnnamedValue.
+    def visitUnnamedValue(self, ctx:equelParser.UnnamedValueContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by equelParser#UnnamedList.
     def visitUnnamedList(self, ctx:equelParser.UnnamedListContext):
         return self.visitChildren(ctx)

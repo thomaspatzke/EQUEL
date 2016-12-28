@@ -7,7 +7,7 @@ lexer grammar equelLexer ;
 // the initial mode.
 
 FirstPrefixChar: [:&<>#] -> pushMode(EQUEL), pushMode(VALUE), type(PrefixChar) ;
-FirstIdentifier: ( 'match_all' | 'match' | 'match_phrase' | 'match_phrase_prefix' | 'multi_match' | 'common_terms' | 'query_string' | 'simple_query_string' | 'term' | 'terms' | 'range' | 'exists' | 'prefix' | 'wildcard' | 'regexp' | 'fuzzy' | 'type' | 'ids' | 'span_term' | 'span_multi' | 'span_first' | 'span_near' | 'span_or' | 'span_not' | 'span_containing' | 'span_within' | 'field_masking_span' ) -> pushMode(EQUEL), type(Identifier) ;
+FirstIdentifier: ( 'match_all' | 'match' | 'match_phrase' | 'match_phrase_prefix' | 'multi_match' | 'common_terms' | 'query_string' | 'simple_query_string' | 'term' | 'terms' | 'range' | 'exists' | 'prefix' | 'wildcard' | 'regexp' | 'fuzzy' | 'type' | 'ids' | 'script' | 'span_term' | 'span_multi' | 'span_first' | 'span_near' | 'span_or' | 'span_not' | 'span_containing' | 'span_within' | 'field_masking_span' ) -> pushMode(EQUEL), type(Identifier) ;
 QueryStringFirstChar: ~[|] -> pushMode(QUERY), type(QueryStringChar) ;
 
 mode QUERY ;
@@ -26,6 +26,8 @@ LParLD: '[' -> pushMode(VALUE), pushMode(VALUE), type(LParL) ;
 Equals: '=' -> pushMode(VALUE) ;
 PrefixChar: [:&<>!#+-] -> pushMode(VALUE) ;
 Identifier: [a-zA-Z0-9_.@]+ ;
+UnnamedSingleQuotedValue: '\'' ~[']+ '\'' -> type(SingleQuotedValue) ;
+UnnamedDoubleQuotedValue: '"' ~["]+ '"' -> type(DoubleQuotedValue) ;
 WS: [ \t\n\r]+ -> skip;
 
 mode VALUE ;

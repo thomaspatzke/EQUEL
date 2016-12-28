@@ -95,6 +95,9 @@ class EQUELParserListener(equelParserListener):
     def exitKVParam(self, ctx):
         ctx.param = Parameter(ctx.name().Identifier().getText(), ctx.value().text)
 
+    def exitUnnamedValue(self, ctx):
+        ctx.param = Parameter(None, ctx.value().text)
+
     def exitUnnamedList(self, ctx):
         ctx.param = Parameter(None, list(map(lambda c: c.text, ctx.value())))
 
