@@ -1,0 +1,53 @@
+{
+  "query": {
+    "query_string": {
+      "query": "EventID:4625 LogonType:3",
+      "default_operator": "AND"
+    }
+  },
+  "aggs": {
+    "computer": {
+      "terms": {
+        "field": "ComputerName"
+      },
+      "aggs": {
+        "computer_user": {
+          "terms": {
+            "field": "TargetUserName"
+          },
+          "aggs": {
+            "agg1": {
+              "aggs": {
+                "agg2": {
+                  "max": {
+                    "field": "@timestamp"
+                  }
+                }
+              },
+              "min": {
+                "field": "@timestamp"
+              }
+            }
+          }
+        },
+        "agg3": {
+          "value_count": {
+            "field": "TargetUserName"
+          }
+        }
+      }
+    },
+    "agg4": {
+      "terms": {
+        "field": "TargetUserName"
+      },
+      "aggs": {
+        "agg5": {
+          "value_count": {
+            "field": "ComputerName"
+          }
+        }
+      }
+    }
+  }
+}

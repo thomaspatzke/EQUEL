@@ -1,0 +1,52 @@
+{
+  "aggs": {
+    "agg4": {
+      "aggs": {
+        "agg5": {
+          "value_count": {
+            "field": "ComputerName"
+          }
+        }
+      },
+      "terms": {
+        "field": "TargetUserName"
+      }
+    },
+    "computer": {
+      "aggs": {
+        "computer_user": {
+          "aggs": {
+            "agg1": {
+              "aggs": {
+                "agg2": {
+                  "max": {
+                    "field": "@timestamp"
+                  }
+                }
+              },
+              "min": {
+                "field": "@timestamp"
+              }
+            }
+          },
+          "terms": {
+            "field": "TargetUserName"
+          }
+        },
+        "agg3": {
+          "value_count": {
+            "field": "TargetUserName"
+          }
+        }
+      },
+      "terms": {
+        "field": "ComputerName"
+      }
+    }
+  },
+  "query": {
+    "query_string": {
+      "query": "EventID:4625"
+    }
+  }
+}

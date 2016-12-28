@@ -1,0 +1,7 @@
+{
+  "query": {
+    "query_string": {
+      "query": "nested path=response.header query=(match response.header.name=content-security-policy)"
+    }
+  }
+}
