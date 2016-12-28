@@ -86,7 +86,7 @@ class EQUELParserListener(equelParserListener):
         plugin = self.engine.resolveShortcutPlugin(type)
         prefix = ctx.shortcutExpr().PrefixChar().getText()
         value = ctx.shortcutExpr().value().text
-        ctx.json = plugin.apply(prefix, value, self.aggs)
+        ctx.json = plugin.apply(prefix, value, self, ctx)
 
     def exitVerb(self, ctx):
         ctx.text = ctx.Identifier().getText()
