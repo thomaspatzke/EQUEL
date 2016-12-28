@@ -65,7 +65,6 @@ class TextOutputPlugin(BaseOutputPlugin):
 
     def apply(self, verb, params, parser, ctx):
         """Parameter postprocessing"""
-        print(params)
         super().apply(verb, params, parser, ctx)
         if type(self.params['fields']) == str:
             self.params['fields'] = [self.params['fields']]

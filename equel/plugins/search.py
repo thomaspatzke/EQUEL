@@ -120,7 +120,6 @@ class ScriptQueryPlugin(BasePlugin):
     description = "Perform a script query (default: painless)"
 
     def apply(self, verb, params, parser, ctx):
-        print(params)
         if 'unnamed' not in params:
             raise EQUELPluginException("Search subquery 'script' requires a script as unnamed parameter")
         script = params['unnamed']
