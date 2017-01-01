@@ -1,0 +1,1 @@
+foo:bar | fields [foo,bar] | script "foo" | script "bar"

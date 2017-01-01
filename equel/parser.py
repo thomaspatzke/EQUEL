@@ -39,7 +39,19 @@ class EQUELParserListener(equelParserListener):
 
     # Expressions
     def exitSearchExpr(self, ctx):
-        self.query.update(ctx.genericExpr().json)
+        json = ctx.genericExpr().json
+        if ctx.genericExpr().plugin.filterable and not isinstance(ctx.parentCtx, equelParser.FirstSearchExprContext):
+            try:    # append to filter list in existing query structure
+                self.query["query"]["bool"]["filter"].append(json)
+            except KeyError:    # expected query structure doesn't exist, create it
+                self.query["query"] = {
+                        "bool": {
+                            "must": self.query["query"],
+                            "filter": [ json ]
+                        }
+                    }
+        else:
+            self.query.update(json)
 
     def exitQueryStringExpr(self, ctx):
         plugin = self.engine.resolveQueryStringPlugin()
@@ -78,15 +90,15 @@ class EQUELParserListener(equelParserListener):
         type = self.engine.getPluginTypeForContext(ctx.parentCtx)
         verb = ctx.verb().text
         params = ParameterList(ctx.parameter())
-        plugin = self.engine.resolvePlugin(type, verb)
-        ctx.json = plugin.apply(verb, params, self, ctx)    # TODO: name 'json' does not match, as it contains dicts or output plugin objects
+        ctx.plugin = self.engine.resolvePlugin(type, verb)
+        ctx.json = ctx.plugin.apply(verb, params, self, ctx)    # TODO: name 'json' does not match, as it contains dicts or output plugin objects
 
     def exitShortcut(self, ctx):
         type = self.engine.getPluginTypeForContext(ctx.parentCtx)
-        plugin = self.engine.resolveShortcutPlugin(type)
+        ctx.plugin = self.engine.resolveShortcutPlugin(type)
         prefix = ctx.shortcutExpr().PrefixChar().getText()
         value = ctx.shortcutExpr().value().text
-        ctx.json = plugin.apply(prefix, value, self, ctx)
+        ctx.json = ctx.plugin.apply(prefix, value, self, ctx)
 
     def exitVerb(self, ctx):
         ctx.text = ctx.Identifier().getText()

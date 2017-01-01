@@ -1,0 +1,35 @@
+{
+  "query": {
+    "bool": {
+      "must": {
+        "query_string": {
+          "query": "foo:bar"
+        }
+      },
+      "filter": [
+        {
+          "script": {
+            "script": {
+              "lang": "painless",
+              "inline": "foo"
+            }
+          }
+        },
+        {
+          "script": {
+            "script": {
+              "lang": "painless",
+              "inline": "bar"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "_source": {
+    "include": [
+      "foo",
+      "bar"
+    ]
+  }
+}
