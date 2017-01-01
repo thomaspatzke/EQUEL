@@ -1,15 +1,22 @@
 # Search Plugins
 from .generic import BasePlugin, GenericPlugin, BaseShortcutPlugin, EQUELPluginException
 
-class GenericSearchPlugin(GenericPlugin):
+class BaseSearchPlugin(GenericPlugin):
+    """Search specific plugin attributes"""
+    # Allow return value of plugin to be used as search filter, e.g. in further search subexpressions
+    filterable = False
+
+class GenericSearchPlugin(BaseSearchPlugin):
     """Convert EQUEL into JSON and wrap into query attribute"""
     name = "Generic Search Plugin"
     description = "Generic EQUEL to JSON conversion with wrapping into query attribute"
+    # TODO: this currently overwrites everything in generated ES DSL JSON
+    #filterable = True
 
     def apply(self, verb, params, parser, ctx):
         return { "query": super().apply(verb, params, parser, ctx) }
 
-class ESQueryStringPlugin(BasePlugin):
+class ESQueryStringPlugin(BaseSearchPlugin):
     """Convert Elasticsearch query string into Query DSL structure"""
     name = "Elasticsearch Query String Plugin"
     description = "Convert Elasticsearch query string into Query DSL structure"
@@ -25,6 +32,7 @@ class SearchShortcutPlugin(BaseShortcutPlugin):
     """
     name = "Search shortcut plugin"
     description = "Convert value into query_string query"
+    filterable = True
 
     def apply(self, prefix, value, parser, ctx):
         res = { "query_string": { "query": value } }
@@ -32,7 +40,7 @@ class SearchShortcutPlugin(BaseShortcutPlugin):
             res["query_string"]["default_operator"] = "AND"
         return { "query": res }
 
-class SortPlugin(BasePlugin):
+class SortPlugin(BaseSearchPlugin):
     """
     Sort entries by addition of a 'sort' query option. Parameter s contains one or multiple field names.
     If suffixed with + or - the sort order is added explicitely (asc/desc).
@@ -68,7 +76,7 @@ class SortPlugin(BasePlugin):
 
         return { "sort": self.sortfields }
 
-class FieldFilterPlugin(BasePlugin):
+class FieldFilterPlugin(BaseSearchPlugin):
     """
     Filter fields from search result. Parameters:
     [field,...]: include these fields
@@ -101,10 +109,11 @@ class FieldFilterPlugin(BasePlugin):
             filters["exclude"] = exclude
         return { "_source": filters }
 
-class NestQueryPlugin(BasePlugin):
+class NestQueryPlugin(BaseSearchPlugin):
     """Wrap current query into nested query"""
     name = "Nest current query"
     description = "Wraps current query into nested query"
+    # TODO: make it filterable - last created ES DSL expression has to be stored somewhere
 
     def apply(self, verb, params, parser, ctx):
         if 'path' not in params:
@@ -114,10 +123,11 @@ class NestQueryPlugin(BasePlugin):
         parser.query['query'] = query
         return {}
 
-class ScriptQueryPlugin(BasePlugin):
+class ScriptQueryPlugin(BaseSearchPlugin):
     """Perform a script query"""
     name = "Script query"
     description = "Perform a script query (default: painless)"
+    filterable = True
 
     def apply(self, verb, params, parser, ctx):
         if 'unnamed' not in params:
