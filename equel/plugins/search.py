@@ -10,11 +10,10 @@ class GenericSearchPlugin(BaseSearchPlugin):
     """Convert EQUEL into JSON and wrap into query attribute"""
     name = "Generic Search Plugin"
     description = "Generic EQUEL to JSON conversion with wrapping into query attribute"
-    # TODO: this currently overwrites everything in generated ES DSL JSON
-    #filterable = True
+    filterable = True
 
     def apply(self, verb, params, parser, ctx):
-        return { "query": super().apply(verb, params, parser, ctx) }
+        return super().apply(verb, params, parser, ctx)
 
 class ESQueryStringPlugin(BaseSearchPlugin):
     """Convert Elasticsearch query string into Query DSL structure"""
@@ -38,7 +37,7 @@ class SearchShortcutPlugin(BaseShortcutPlugin):
         res = { "query_string": { "query": value } }
         if prefix == "&":
             res["query_string"]["default_operator"] = "AND"
-        return { "query": res }
+        return res
 
 class SortPlugin(BaseSearchPlugin):
     """

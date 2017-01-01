@@ -1,8 +1,10 @@
 {
-  "script": {
+  "query": {
     "script": {
-      "lang": "painless",
-      "inline": "foo bar"
+      "script": {
+        "inline": "foo bar",
+        "lang": "painless"
+      }
     }
   }
 }

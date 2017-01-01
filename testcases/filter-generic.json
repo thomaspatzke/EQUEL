@@ -1,0 +1,18 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "exists": {
+            "field": "foobar"
+          }
+        }
+      ],
+      "must": {
+        "query_string": {
+          "query": "foo:bar"
+        }
+      }
+    }
+  }
+}

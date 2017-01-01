@@ -50,6 +50,8 @@ class EQUELParserListener(equelParserListener):
                             "filter": [ json ]
                         }
                     }
+        elif ctx.genericExpr().plugin.filterable and isinstance(ctx.parentCtx, equelParser.FirstSearchExprContext):
+                self.query["query"] = json
         else:
             self.query.update(json)
 
