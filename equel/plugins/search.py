@@ -139,3 +139,26 @@ class ScriptQueryPlugin(BaseSearchPlugin):
             lang = "painless"
 
         return { "script": { "script": { "lang": lang, "inline": script } } }
+
+class ScriptFieldPlugin(BaseSearchPlugin):
+    """Add fields that are calculated by scripts"""
+    name = "Script field"
+    description = "Add fields that are calculated by script code (default: painless)"
+
+    def apply(self, verb, params, parser, ctx):
+        try:
+            lang = params['_lang']
+        except KeyError:
+            lang = "painless"
+        res = { "script_fields": dict() }
+
+        for param in params:
+            if param.key == '_lang':
+                continue
+            res['script_fields'][param.key] = { "script": { "lang": lang, "inline": param.value } }
+
+        # normally, script_fields lets _source and friends disappear. Bring it back if not required explicitely by query and no fields are defined
+        if 'onlyscriptfields' not in params and 'fields' not in parser.query:
+            parser.query['stored_fields'] = [ '_source' ]
+
+        return res

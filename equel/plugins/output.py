@@ -94,7 +94,7 @@ class TextOutputPlugin(BaseOutputPlugin):
         excludefields = self.params['exclude']
         return (len(fields) > 0 and cprefixni in fields and cprefixni not in excludefields) or (len(fields) <= 0 and cprefixni not in excludefields)
 
-    def render_fields(self, docpart, prefix=""):
+    def render_fields(self, docpart, prefix="", namecolor="green"):
         """
         Renders fields of a part of a document recursively. Parameters:
 
@@ -114,27 +114,27 @@ class TextOutputPlugin(BaseOutputPlugin):
                     cprefix = prefix + "." + key
 
                 if type(docpart[key]) in (dict, list):
-                    result += self.render_fields(docpart[key], cprefix)
+                    result += self.render_fields(docpart[key], cprefix, namecolor)
                 else:
                     if self.check_field_output(cprefix):
                         origval = str(docpart[key])
                         val = origval[:maxlen]
                         if len(origval) > len(val):
                             val += self.colorize("[...]", attrs=["dark"])
-                        result += "%s%s%s%s" % (self.colorize(cprefix, "green"), self.colorize("=", "yellow"), val, suffix)
+                        result += "%s%s%s%s" % (self.colorize(cprefix, namecolor), self.colorize("=", "blue"), val, suffix)
         elif type(docpart) == list:
             for i in range(0, len(docpart)):
                 cprefix = prefix + "[%d]" % (i + 1)
 
                 if type(docpart[i]) in (dict, list):
-                    result += self.render_fields(docpart[i], cprefix)
+                    result += self.render_fields(docpart[i], cprefix, namecolor)
                 else:
                     if self.check_field_output(cprefix):
                         origval = str(docpart[i])
                         val = origval[:maxlen]
                         if len(origval) > len(val):
                             val += self.colorize("[...]", attrs=["dark"])
-                        result += "%s%s%s%s" % (self.colorize(cprefix, "green"), self.colorize("=", "yellow"), val, suffix)
+                        result += "%s%s%s%s" % (self.colorize(cprefix, namecolor), self.colorize("=", "blue"), val, suffix)
         else:
             result += str(docpart) + suffix
 
@@ -158,5 +158,6 @@ class TextOutputPlugin(BaseOutputPlugin):
                 except:
                     output += "-\n"
             output += self.render_fields(doc['_source'])
+            output += self.render_fields(doc['fields'], namecolor="yellow")
             output += self.params['docsep'] * "\n"
         return output

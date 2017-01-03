@@ -1,0 +1,24 @@
+{
+  "stored_fields": [
+    "_source"
+  ],
+  "script_fields": {
+    "bar": {
+      "script": {
+        "inline": "foo",
+        "lang": "foobar"
+      }
+    },
+    "foo": {
+      "script": {
+        "inline": "bar",
+        "lang": "foobar"
+      }
+    }
+  },
+  "query": {
+    "query_string": {
+      "query": "*"
+    }
+  }
+}
