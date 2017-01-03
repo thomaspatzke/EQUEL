@@ -1,6 +1,6 @@
 {
   "_source": {
-    "include": [
+    "includes": [
       "@timestamp",
       "ComputerName",
       "TargetDomainName",

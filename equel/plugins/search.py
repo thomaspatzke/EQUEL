@@ -103,9 +103,9 @@ class FieldFilterPlugin(BaseSearchPlugin):
 
         filters = dict()
         if include:
-            filters["include"] = include
+            filters["includes"] = include
         if exclude:
-            filters["exclude"] = exclude
+            filters["excludes"] = exclude
         return { "_source": filters }
 
 class NestQueryPlugin(BaseSearchPlugin):

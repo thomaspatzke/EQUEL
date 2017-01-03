@@ -27,7 +27,7 @@
     }
   },
   "_source": {
-    "include": [
+    "includes": [
       "foo",
       "bar"
     ]
