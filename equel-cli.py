@@ -16,11 +16,29 @@ argparser = argparse.ArgumentParser(description="EQUEL Command Line Interface")
 argparser.add_argument("--server", "-s", action="append", default="localhost", help="ElasticSearch server")
 argparser.add_argument("--index", "-i", default="*", help="ElasticSearch index pattern to query")
 argparser.add_argument("--max-results", "-m", type=int, default=1000, help="Maximum returned documents")
+argparser.add_argument("--outputs", "-O", help="Select output streams as comma separated list: output1.stream1,output2.stream2,[...]")
 argparser.add_argument("--compileonly", "-c", action="store_true", help="Only compile EQUEL to ES query - don't perform any requests")
 argparser.add_argument("--indent", "-I", type=int, default=2, help="Indent request with given width")
 argparser.add_argument("--file", "-f", action="store_true", help="Treat expression as file that contains an EQUEL expression")
 argparser.add_argument("expression", help="Expression or file name")
 args = argparser.parse_args()
+
+# parse outputs (-O) parameter
+selected_outputs = dict()
+if args.outputs:
+    outputs = args.outputs.split(",")
+    for output in outputs:
+        try:
+            out, stream = output.split(".")
+            try:
+                selected_outputs[out].add(stream)
+            except KeyError:
+                selected_outputs[out] = { stream }
+        except ValueError:
+            print(sys.stderr, "Output selection must have format output.stream")
+            sys.exit(10)
+else:
+    selected_outputs = None
 
 e = EQUELEngine(args.server, args.index)
 if args.file:
@@ -34,8 +52,12 @@ if args.compileonly:
 
 res = request.execute(size=args.max_results)
 for name in res.outputs:
-    print("===== Output: %s =====" % (name))
+    if selected_outputs and name not in selected_outputs:
+        continue
     output = res.outputs[name]
+    print("===== Output: %s =====" % (name))
     for stream in output:
+        if selected_outputs and stream not in selected_outputs[name]:
+            continue
         print("========== Output Stream '%s':" % (stream))
         print(output[stream])
