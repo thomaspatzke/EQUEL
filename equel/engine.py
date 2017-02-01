@@ -134,11 +134,11 @@ class EQUELRequest:
     def execute(self, *args, **kwargs):
         """Instantiates base elasticsearch_dsl Search object"""
         es = Elasticsearch(hosts=self.engine.host)
-        res = EQUELResult(es.search(index=self.engine.index, body=self.jsonQuery(), *args, **kwargs))
+        result = EQUELResult(es.search(index=self.engine.index, body=self.jsonQuery(), *args, **kwargs))
         for outputname in self.output:
             outputplugin = self.output[outputname]
-            res.addOutput(outputname, outputplugin.render(res))
-        return res
+            result.addOutput(outputname, outputplugin)
+        return result
 
 class EQUELResult:
     """Result of an EQUEL query"""
@@ -147,6 +147,51 @@ class EQUELResult:
         self.result = result
         self.outputs = dict()
 
-    def addOutput(self, name, output):
-        self.outputs[name] = output
+    def addOutput(self, name, outputPlugin):
+        self.outputs[name] = outputPlugin.render(self)
 
+class EQUELOutput:
+    """Result from an output plugin."""
+    TYPE_TEXT = 1
+    TYPE_HTML = 2
+    TYPE_IMAGE = 3
+
+    textTypes = { TYPE_TEXT, TYPE_HTML }
+    binaryTypes = { TYPE_IMAGE }
+
+    def __init__(self, type, initStreams=['default']):
+        """Inititalize output object with type."""
+        self.type = type
+        if type in self.textTypes:
+            self.initContent = ''
+        else:
+            self.initContent = b''
+        self.streams = dict()
+        self.streamlist = list()
+        for s in initStreams:
+            self.initStream(s)
+        if len(initStreams) > 0:
+            self.currentStream = initStreams[0]
+        else:
+            self.currentStream = None
+
+    def initStream(self, name):
+        """Initialize output stream with default initial content for this type."""
+        self.streams[name] = self.initContent
+        self.streamlist.append(name)
+        self.selectStream(name)
+
+    def selectStream(self, name):
+        self.currentStream = name
+
+    def append(self, content, stream=None):
+        """Append content to current or named output stream."""
+        if stream == None:
+            stream = self.currentStream
+        self.streams[stream] += content
+
+    def __getitem__(self, key):
+        return self.streams[key]
+
+    def __iter__(self):
+        return iter(self.streamlist)

@@ -1,5 +1,6 @@
 # Output Plugins
 from .generic import EQUELPluginException
+from equel import engine
 import json
 import re
 
@@ -31,7 +32,9 @@ class BaseOutputPlugin:
         The result object is passed to this method.
         
         """
-        return json.dumps(result.result, indent=2)
+        out = engine.EQUELOutput(engine.EQUELOutput.TYPE_TEXT)
+        out.append(json.dumps(result.result, indent=2))
+        return out
 
 class TextOutputPlugin(BaseOutputPlugin):
     """
@@ -141,7 +144,7 @@ class TextOutputPlugin(BaseOutputPlugin):
         return result
 
     def render(self, result):
-        output = ""
+        output = engine.EQUELOutput(engine.EQUELOutput.TYPE_TEXT)
         for doc in result.result["hits"]["hits"]:  # iterate over all documents from result
             if 'mainfield' in self.params:
                 try:
@@ -151,13 +154,13 @@ class TextOutputPlugin(BaseOutputPlugin):
                         docpart = docpart[key]
                     origval = str(docpart)
                     val = origval[:self.params['maxmainlen']]
-                    output += self.colorize(val, "yellow", "on_blue", ["bold"])
+                    output.append(self.colorize(val, "yellow", "on_blue", ["bold"]))
                     if len(origval) > len(val):
-                        output += self.colorize("[...]", "yellow", "on_blue")
-                    output += "\n"
+                        output.append(self.colorize("[...]", "yellow", "on_blue"))
+                    output.append("\n")
                 except:
-                    output += "-\n"
-            output += self.render_fields(doc['_source'])
-            output += self.render_fields(doc['fields'], namecolor="yellow")
-            output += self.params['docsep'] * "\n"
+                    output.append("-\n")
+            output.append(self.render_fields(doc['_source']))
+            #output.append(self.render_fields(doc['fields'], namecolor="yellow"))
+            output.append(self.params['docsep'] * "\n")
         return output

@@ -35,4 +35,7 @@ if args.compileonly:
 res = request.execute(size=args.max_results)
 for name in res.outputs:
     print("===== Output: %s =====" % (name))
-    print(res.outputs[name])
+    output = res.outputs[name]
+    for stream in output:
+        print("========== Output Stream '%s':" % (stream))
+        print(output[stream])
