@@ -190,6 +190,9 @@ class EQUELOutput:
             stream = self.currentStream
         self.streams[stream] += content
 
+    def appendLine(self, content, stream=None):
+        self.append(content + "\n", stream)
+
     def __getitem__(self, key):
         return self.streams[key]
 

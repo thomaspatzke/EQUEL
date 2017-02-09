@@ -143,8 +143,26 @@ class TextOutputPlugin(BaseOutputPlugin):
 
         return result
 
+    def render_aggregation(self, output, agg, prefix=""):
+        if "buckets" in agg:     # Bucket Aggregation
+            for bucket in agg['buckets']:   # iterate over buckets and print key and document count
+                output.appendLine(prefix + "  %s (%d)" % (bucket['key'], bucket['doc_count']))
+                for subaggName in bucket.keys():    # iterate over sub aggregations
+                    if subaggName in ('key', 'doc_count'):  # ignore bucket properties
+                        continue
+                    subagg = bucket[subaggName]
+                    if type(subagg) == dict:
+                        output.appendLine(prefix + "    Aggregation: %s" % (subaggName))
+                        self.render_aggregation(output, subagg, prefix + "    ")
+        else:   # metrics aggregation
+            for metric in agg:
+                output.appendLine(prefix + "  %s = %s" % (metric, agg[metric]))
+
+
     def render(self, result):
-        output = engine.EQUELOutput(engine.EQUELOutput.TYPE_TEXT)
+        output = engine.EQUELOutput(engine.EQUELOutput.TYPE_TEXT, ["search", "aggregations"])
+
+        # Search hits
         for doc in result.result["hits"]["hits"]:  # iterate over all documents from result
             if 'mainfield' in self.params:
                 try:
@@ -161,6 +179,13 @@ class TextOutputPlugin(BaseOutputPlugin):
                 except:
                     output.append("-\n")
             output.append(self.render_fields(doc['_source']))
-            #output.append(self.render_fields(doc['fields'], namecolor="yellow"))
             output.append(self.params['docsep'] * "\n")
+
+        # Aggregations
+        output.selectStream("aggregations")
+        aggs = result.result['aggregations']
+        for aggName in aggs:
+            output.appendLine("Aggregation: %s" % (aggName))
+            self.render_aggregation(output, aggs[aggName])
+
         return output
