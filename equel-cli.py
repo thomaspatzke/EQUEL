@@ -35,7 +35,7 @@ if args.outputs:
             except KeyError:
                 selected_outputs[out] = { stream }
         except ValueError:
-            print(sys.stderr, "Output selection must have format output.stream")
+            print("Output selection must have format output.stream", file=sys.stderr)
             sys.exit(10)
 else:
     selected_outputs = None
