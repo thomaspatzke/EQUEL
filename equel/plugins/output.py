@@ -145,18 +145,48 @@ class TextOutputPlugin(BaseOutputPlugin):
 
     def render_aggregation(self, output, agg, prefix=""):
         if "buckets" in agg:     # Bucket Aggregation
+            numBuckets = len(agg['buckets'])
+            i = 0
             for bucket in agg['buckets']:   # iterate over buckets and print key and document count
-                output.appendLine(prefix + "  %s (%d)" % (bucket['key'], bucket['doc_count']))
-                for subaggName in bucket.keys():    # iterate over sub aggregations
-                    if subaggName in ('key', 'doc_count'):  # ignore bucket properties
-                        continue
+                i += 1
+                lastBucket = i == numBuckets
+                output.append(prefix)
+                bucketPrefix = "  "
+                if lastBucket:
+                    output.append("└")
+                else:
+                    output.append("├")
+                    bucketPrefix = "│ "
+                output.appendLine(" %s (%d)" % (bucket['key'], bucket['doc_count']))
+
+                subaggNames = set(bucket.keys()).difference(('key', 'doc_count'))
+                numSubaggs = len(subaggNames)
+                j = 0
+                for subaggName in subaggNames:    # iterate over sub aggregations
+                    j += 1
+                    lastSubagg = j == numSubaggs
                     subagg = bucket[subaggName]
                     if type(subagg) == dict:
-                        output.appendLine(prefix + "    Aggregation: %s" % (subaggName))
-                        self.render_aggregation(output, subagg, prefix + "    ")
+                        output.append(prefix + bucketPrefix)
+                        subaggPrefix = "  "
+                        if lastSubagg:
+                            output.append("└")
+                        else:
+                            output.append("├")
+                            subaggPrefix = "│ "
+                        output.appendLine(" Aggregation: %s" % (subaggName))
+                        self.render_aggregation(output, subagg, prefix + bucketPrefix + subaggPrefix)
         else:   # metrics aggregation
+            numMetrics = len(agg)
+            i = 0
             for metric in agg:
-                output.appendLine(prefix + "  %s = %s" % (metric, agg[metric]))
+                i += 1
+                output.append(prefix)
+                if i < numMetrics:
+                    output.append("├")
+                else:
+                    output.append("└")
+                output.appendLine(" %s = %s" % (metric, agg[metric]))
 
 
     def render(self, result):
@@ -184,8 +214,10 @@ class TextOutputPlugin(BaseOutputPlugin):
         # Aggregations
         output.selectStream("aggregations")
         aggs = result.result['aggregations']
+        i = 0
         for aggName in aggs:
+            i += 1
             output.appendLine("Aggregation: %s" % (aggName))
-            self.render_aggregation(output, aggs[aggName])
+            self.render_aggregation(output, aggs[aggName], "  ")
 
         return output
