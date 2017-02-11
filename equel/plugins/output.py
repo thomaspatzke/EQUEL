@@ -157,7 +157,7 @@ class TextOutputPlugin(BaseOutputPlugin):
                 else:
                     output.append("├")
                     bucketPrefix = "│ "
-                output.appendLine(" %s (%d)" % (bucket['key'], bucket['doc_count']))
+                output.appendLine((" %s " + self.colorize("(%d)", "red")) % (bucket['key'], bucket['doc_count']))
 
                 subaggNames = set(bucket.keys()).difference(('key', 'doc_count'))
                 numSubaggs = len(subaggNames)
@@ -174,7 +174,7 @@ class TextOutputPlugin(BaseOutputPlugin):
                         else:
                             output.append("├")
                             subaggPrefix = "│ "
-                        output.appendLine(" Aggregation: %s" % (subaggName))
+                        output.appendLine(self.colorize(" Aggregation: ", "yellow") + subaggName)
                         self.render_aggregation(output, subagg, prefix + bucketPrefix + subaggPrefix)
         else:   # metrics aggregation
             numMetrics = len(agg)
@@ -186,8 +186,7 @@ class TextOutputPlugin(BaseOutputPlugin):
                     output.append("├")
                 else:
                     output.append("└")
-                output.appendLine(" %s = %s" % (metric, agg[metric]))
-
+                output.appendLine(" %s %s %s" % (self.colorize(metric, "green"), self.colorize("=", "blue"), agg[metric]))
 
     def render(self, result):
         output = engine.EQUELOutput(engine.EQUELOutput.TYPE_TEXT, ["search", "aggregations"])
@@ -217,7 +216,7 @@ class TextOutputPlugin(BaseOutputPlugin):
         i = 0
         for aggName in aggs:
             i += 1
-            output.appendLine("Aggregation: %s" % (aggName))
+            output.appendLine(self.colorize("Aggregation: ", "yellow") + aggName)
             self.render_aggregation(output, aggs[aggName], "  ")
 
         return output
