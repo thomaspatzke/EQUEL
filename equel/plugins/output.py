@@ -46,7 +46,7 @@ class TextOutputPlugin(BaseOutputPlugin):
     mainvalue is the value of a dedicated field, e.g. raw log message.
 
     Parameters:
-    * color (flag): Colorize output, highlight captions and main value with terminal escape sequences.
+    * nocolor (flag): don't Colorize output. Colorization highlights captions and main value with terminal escape sequences.
     * mainfield: Name of the main field where the main value is pulled from. If not given, no mainvalue is shown.
     * fields: List of fields to display. If not given, all fields are displayed.
     * exclude: List of fields not to display.
@@ -56,7 +56,7 @@ class TextOutputPlugin(BaseOutputPlugin):
     * condensed: do not start a new line for each field.
     """
     _expectedParams = (
-                ("color", True),
+                ("nocolor", False),
                 ("mainfield", None),
                 ("fields", list()),
                 ("exclude", list()),
@@ -77,7 +77,7 @@ class TextOutputPlugin(BaseOutputPlugin):
 
     def colorize(self, text, *args, **kwargs):
         """Output colorized if configured"""
-        if self.params['color']:
+        if not self.params['nocolor']:
             from termcolor import colored
             return colored(text, *args, **kwargs)
         else:
