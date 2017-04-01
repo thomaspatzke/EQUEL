@@ -211,12 +211,13 @@ class TextOutputPlugin(BaseOutputPlugin):
             output.append(self.params['docsep'] * "\n")
 
         # Aggregations
-        output.selectStream("aggregations")
-        aggs = result.result['aggregations']
-        i = 0
-        for aggName in aggs:
-            i += 1
-            output.appendLine(self.colorize("Aggregation: ", "yellow") + aggName)
-            self.render_aggregation(output, aggs[aggName], "  ")
+        if 'aggregations' in result.result:
+            output.selectStream("aggregations")
+            aggs = result.result['aggregations']
+            i = 0
+            for aggName in aggs:
+                i += 1
+                output.appendLine(self.colorize("Aggregation: ", "yellow") + aggName)
+                self.render_aggregation(output, aggs[aggName], "  ")
 
         return output
