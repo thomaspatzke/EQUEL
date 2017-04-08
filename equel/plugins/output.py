@@ -36,7 +36,35 @@ class BaseOutputPlugin:
         out.append(json.dumps(result.result, indent=2))
         return out
 
-class TextOutputPlugin(BaseOutputPlugin):
+class FieldSelectionMixin():
+    """
+    Default functions for selection of fields for output plugins. They must define two parameters: fields and exclude.
+    """
+
+    def apply(self, verb, params, parser, ctx):
+        """Parameter postprocessing"""
+        super().apply(verb, params, parser, ctx)
+        if type(self.params['fields']) == str:
+            self.params['fields'] = [self.params['fields']]
+        if type(self.params['exclude']) == str:
+            self.params['exclude'] = [self.params['exclude']]
+        return self
+
+    def check_field_output(self, key):
+        """
+        Check if field should be output:
+
+        * if whitelist is defined, field must be contained here and not contained on blacklist
+        * if no whitelist is defined, field must not be contained on blacklist
+
+        List indices are stripped from field name.
+        """
+        cprefixni = reRemoveIndices.sub("", key)
+        fields = self.params['fields']
+        excludefields = self.params['exclude']
+        return (len(fields) > 0 and cprefixni in fields and cprefixni not in excludefields) or (len(fields) <= 0 and cprefixni not in excludefields)
+
+class TextOutputPlugin(BaseOutputPlugin, FieldSelectionMixin):
     """
     Returns text in the following format:
 
@@ -219,5 +247,128 @@ class TextOutputPlugin(BaseOutputPlugin):
                 i += 1
                 output.appendLine(self.colorize("Aggregation: ", "yellow") + aggName)
                 self.render_aggregation(output, aggs[aggName], "  ")
+
+        return output
+
+class CSVOutputPlugin(BaseOutputPlugin, FieldSelectionMixin):
+    """
+    Returns search result and aggregations in CSV format.
+
+    Parameters:
+    * fields: List of fields to display. If not given, all fields are displayed.
+    * exclude: List of fields not to display.
+    * dialect: Passed as dialect parameter to csv.DictWriter
+    * header: output header as first line
+    * nestedcolfield: name of a field which values are used as column name prefix in case of a multivalud nested documents
+    * nestedvalfield: name of field of nested documents that contains value that is used in CSV 
+    * listsep: Multivalued fields are joined in one CSV field separated by this string
+    """
+
+    _expectedParams = (
+                ("fields", list()),
+                ("exclude", list()),
+                ("dialect", "excel"),
+                ("header", True),
+                ("nestedcolfield", None),
+                ("nestedvalfield", None),
+                ("listsep", ", "),
+            )
+
+    def columnNames(self, doc, prefix=""):
+        """
+        Recursively determine all column names for CSV generation as follows:
+
+        * Use field name as column name for plain fields
+        * For fields with subdocuments: use fieldname as prefix and create for each subdocument field a column fieldname.subfieldname. May be nested.
+        * For multivalued fields with nested documents: if nested document has a field which name was configured in nestedcolfield, use the values of
+          this field as column name part.
+
+          Example:
+          {"nested": [{"name": "foo", ...}, {"name": "bar", ...}]}
+
+          is derived to following field names: nested.foo, nested.bar. The parameter nestedvalfield defines the field of the nested document that is
+          used as value.
+
+          For obvious reasons, the selected field shouldn't have too many distinct values.
+        """
+        columns = list()
+        excluded = self.params['exclude']
+        if type(doc) != dict:
+            raise ValueError("Expected dict")
+
+        for field, value in doc.items():
+            if prefix + field in excluded:
+                continue
+            if type(value) == dict:  # field contains subfields - recurse and create field.subfield columns
+                columns.extend(self.columnNames(value, prefix + field + "."))
+            elif type(value) == list:  # multivalued field: contains values or nested docs?
+                if type(value[0]) == dict and self.params['nestedcolfield'] != None:     # nested field
+                    nestedcolfield = self.params['nestedcolfield']
+                    nestedvalfield = self.params['nestedvalfield']
+                    for subdoc in value:
+                        try:
+                            nestedcol = subdoc[nestedcolfield]
+                            colname = prefix + field + "." + nestedcol
+                            if colname in excluded:
+                                continue
+                            columns.append(colname)
+                            if type(subdoc[nestedvalfield]) == dict:
+                                columns.extend(self.columnNames(value[nestedvalfield], prefix + field + "." + nestedcol))
+                        except KeyError:            # ignore if nested document doesn't contains field with column name
+                            pass
+            else:                               # value - use field name as column
+                columns.append(prefix + field)
+
+        return columns
+
+    def extractFieldsFromDoc(self, doc, prefix=""):
+        """Extract field values defined in self.columns from document into a dict required for csv.DictWriter."""
+        res = dict()
+        for field, value in doc.items():
+            if type(value) == dict:             # subdocument
+                res.update(self.extractFieldsFromDoc(value, prefix + field + "."))
+            elif type(value) == list:
+                if type(value[0]) == dict:      # multiple nested documents
+                    nestedcolfield = self.params['nestedcolfield']
+                    nestedvalfield = self.params['nestedvalfield']
+                    if nestedcolfield != None and nestedvalfield != None:
+                        for subdoc in value:
+                            try:
+                                nestedcol = prefix + field + "." + subdoc[nestedcolfield]
+                                if nestedcol in self.columns:
+                                    res[nestedcol] = subdoc[nestedvalfield]
+                            except KeyError:    # nested document doesn't contains column name or value field
+                                pass
+                else:                           # multivalued field
+                    if prefix + field in self.columns:
+                        res[prefix + field] = self.params["listsep"].join(value)
+            else:                               # simple value
+                if prefix + field in self.columns:
+                    res[prefix + field] = value
+        return res
+
+    def render(self, result):
+        output = engine.EQUELOutput(engine.EQUELOutput.TYPE_TEXT, ["search"])
+
+        self.columns = list()
+        # First step: determine all columns that should appear in result of search result CSV
+        if len(self.params['fields']) > 0:    # if field whitelist is given, take this
+            self.columns = self.params['fields']
+        else:
+            for doc in result.result["hits"]["hits"]:  # iterate over all documents from result and pull columns from there
+                doccolumns = self.columnNames(doc["_source"])
+                for column in doccolumns:
+                    if column not in self.columns:
+                        self.columns.append(column)
+
+        import csv
+        csvwriter = csv.DictWriter(output, self.columns, dialect=self.params['dialect'])
+        if self.params['header']:
+            csvwriter.writeheader()
+
+        # Next: Iterate over documents and fill CSV with data
+        for doc in result.result["hits"]["hits"]:
+            extracted = self.extractFieldsFromDoc(doc["_source"])
+            csvwriter.writerow(extracted)
 
         return output

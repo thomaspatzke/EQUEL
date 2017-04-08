@@ -56,8 +56,9 @@ for name in res.outputs:
         continue
     output = res.outputs[name]
     print("===== Output: %s =====" % (name))
-    for stream in output:
-        if selected_outputs and stream not in selected_outputs[name]:
-            continue
-        print("========== Output Stream '%s':" % (stream))
-        print(output[stream])
+    if output:
+        for stream in output:
+            if selected_outputs and stream not in selected_outputs[name]:
+                continue
+            print("========== Output Stream '%s':" % (stream))
+            print(output[stream])

@@ -30,6 +30,7 @@ class EQUELEngine:
             (PT_AGGREGATE, ["groupby", "add_sum", "add_min", "add_max", "valuecount"], aggregate.AggregationKeywordsPlugin),
             (PT_OUTPUT, ["plain"], output.BaseOutputPlugin),
             (PT_OUTPUT, ["text"], output.TextOutputPlugin),
+            (PT_OUTPUT, ["csv"], output.CSVOutputPlugin),
             ]
     defaultOutput = output.BaseOutputPlugin
 
@@ -189,6 +190,10 @@ class EQUELOutput:
         if stream == None:
             stream = self.currentStream
         self.streams[stream] += content
+
+    def write(self, content):
+        """Alias for .append() to make it compatible to functions that expect this method."""
+        self.append(content)
 
     def appendLine(self, content, stream=None):
         self.append(content + "\n", stream)
