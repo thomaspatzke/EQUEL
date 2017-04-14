@@ -34,10 +34,11 @@ class EQUELEngine:
             ]
     defaultOutput = output.BaseOutputPlugin
 
-    def __init__(self, host="localhost", index=""):
+    def __init__(self, host="localhost", index="", timeout=60):
         """Initializes EQUEL engine"""
         self.host = host
         self.index = index
+        self.timeout = timeout
         self.plugins = [dict(), dict(), dict(), dict(), dict()]
         self.registerDefaultPlugins()
 
@@ -134,7 +135,7 @@ class EQUELRequest:
 
     def execute(self, *args, **kwargs):
         """Instantiates base elasticsearch_dsl Search object"""
-        es = Elasticsearch(hosts=self.engine.host)
+        es = Elasticsearch(hosts=self.engine.host, timeout=self.engine.timeout)
         result = EQUELResult(es.search(index=self.engine.index, body=self.jsonQuery(), *args, **kwargs))
         for outputname in self.output:
             outputplugin = self.output[outputname]
