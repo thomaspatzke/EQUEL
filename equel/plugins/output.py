@@ -214,7 +214,20 @@ class TextOutputPlugin(BaseOutputPlugin, FieldSelectionMixin):
                     output.append("├")
                 else:
                     output.append("└")
-                output.appendLine(" %s %s %s" % (self.colorize(metric, "green"), self.colorize("=", "blue"), agg[metric]))
+                if metric == "hits":
+                    output.appendLine(" %s %s total hits=%d max score=%f" % (self.colorize(metric, "green"), self.colorize(":", "blue"), agg[metric]["total"], agg[metric]["max_score"]))
+                    j = 0
+                    numDocs = len(agg[metric]["hits"])
+                    for doc in agg[metric]["hits"]:
+                        j += 1
+                        if j < numDocs:
+                            output.appendLine("%s  ├ index=%s id=%s score=%f" % (prefix, doc["_index"], doc["_id"], doc["_score"]))
+                            output.append(self.render_fields(doc["_source"], prefix + "  │  ", "white"))
+                        else:
+                            output.appendLine("%s  └ index=%s id=%s score=%f" % (prefix, doc["_index"], doc["_id"], doc["_score"]))
+                            output.append(self.render_fields(doc["_source"], prefix + "     ", "white"))
+                else:
+                    output.appendLine(" %s %s %s" % (self.colorize(metric, "green"), self.colorize("=", "blue"), agg[metric]))
 
     def render(self, result):
         output = engine.EQUELOutput(engine.EQUELOutput.TYPE_TEXT, ["search", "aggregations"])
