@@ -126,7 +126,7 @@ class EQUELRequest:
         self.query = parsetree.query
         self.postproc = parsetree.postproc
         self.output = parsetree.output
-        if self.output == None:
+        if self.output == {}:
             self.output = { "default": engine.defaultOutput() }
         self.engine = engine
 
