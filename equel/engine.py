@@ -25,7 +25,7 @@ class EQUELEngine:
             (PT_SEARCH, ["nest"], search.NestQueryPlugin),
             (PT_SEARCH, ["script"], search.ScriptQueryPlugin),
             (PT_SEARCH, ["scriptfield"], search.ScriptFieldPlugin),
-            (PT_AGGREGATE, ["fallback"], generic.GenericPlugin),
+            (PT_AGGREGATE, ["fallback"], aggregate.GenericAggregationPlugin),
             (PT_AGGREGATE, ["shortcut"], aggregate.AggregationShortcutPlugin),
             (PT_AGGREGATE, ["groupby", "add_sum", "add_min", "add_max", "valuecount"], aggregate.AggregationKeywordsPlugin),
             (PT_OUTPUT, ["plain"], output.BaseOutputPlugin),
