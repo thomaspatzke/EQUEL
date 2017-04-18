@@ -34,7 +34,7 @@ class EQUELEngine:
             ]
     defaultOutput = output.BaseOutputPlugin
 
-    def __init__(self, host="localhost", index="", timeout=60):
+    def __init__(self, host="localhost", index="*", timeout=60):
         """Initializes EQUEL engine"""
         self.host = host
         self.index = index
