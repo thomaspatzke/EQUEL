@@ -34,6 +34,7 @@ class AggregationShortcutPlugin(BaseShortcutPlugin):
             "<": ("min", "field"),
             ">": ("max", "field"),
             "#": ("value_count", "field"),
+            "~": ("cardinality", "field"),
             }
 
     def apply(self, prefix, value, parser, ctx):

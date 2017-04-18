@@ -24,7 +24,7 @@ Separator: '|' ;
 RParS: ')' -> popMode ;
 LParLD: '[' -> pushMode(VALUE), pushMode(VALUE), type(LParL) ;
 Equals: '=' -> pushMode(VALUE) ;
-PrefixChar: [:&<>!#+-] -> pushMode(VALUE) ;
+PrefixChar: [:&<>!#+-~] -> pushMode(VALUE) ;
 Identifier: [a-zA-Z0-9_.@]+ ;
 UnnamedSingleQuotedValue: '\'' ~[']+ '\'' -> type(SingleQuotedValue) ;
 UnnamedDoubleQuotedValue: '"' ~["]+ '"' -> type(DoubleQuotedValue) ;
