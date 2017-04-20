@@ -69,6 +69,7 @@ Currently, shortcuts are defined as follows:
 * Aggregations:
   * *:*: equivalent to the *terms* aggregation with the value passed to the *field* parameter.
   * *#*: equivalent to the *value\_count* aggregation with the value passed to the *field* parameter.
+  * *~*: equivalent to the *cardinality* aggregation with the value passed to the *field* parameter.
   * *+*: equivalent to the *sum* aggregation with the value passed to the *field* parameter.
   * *<* and *>*: equivalent to the *min* and *max* aggregation with the value passed to the *field* parameter.
 
@@ -91,7 +92,7 @@ nested path=nested.field query=(:"nested.field.foo:bar AND foobar")
 The list is another possible value type and can contain values or nested search expressions. Lists are enclosed in
 square brackets \[ and \]. Search expressions inside the list must additionally be enclosed in parenthesis.
 
-Examples
+Examples:
 
 ```
 multi_match query=foobar fields=[foo, bar, bla, blubb]
@@ -113,7 +114,7 @@ The verbs match to the query clauses from [Elasticsearch Query
 DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html). Some shortcuts and syntactic
 elements were added for simplification of EQUEL expressions, these are:
 
-* Automatic recognition of search as Elasticsearch query string if first word is not a whitelisted EQUEL verb.
+* Automatic recognition of search as Elasticsearch query string if first word is not a reserved EQUEL verb.
 * Starting a search expression with a colon causes that it is treated as Elasticsearch query string. `:"some query"` is
   equivalent to `query_string query="some query"`.
 
@@ -175,62 +176,20 @@ types:
 
 ### Usage
 
+There are different ways to integrate EQUEL into an existing software project. Generally, the main class is
+`equel.engine.EQUELEngine`. It can be instantiated with the server name (by default `localhost`), an index pattern
+(`*`) and a timeout value as parameter. An EQUEL expression is then parsed with the instance method
+`.parseEQUEL(equel)` or a file with `.parseEQUELFile(filename)`. This returns an `EQUELRequest` object instance
+that can be converted into Elasticsearch DSL with `.jsonQuery()`. `.execute()` performs the request against the
+server and index defined in the `EQUELEngine` object. Obviously, usage of `.jsonQuery()` only supports queries and
+aggregations.
+
+The method `.execute()` returns an `EQUELResult` object (or throws an exception in case of an error), which
+contains `EQUELOutput` instances in the `.outputs` property. An `EQUELOutput` object behaves like a dictionary and
+contains all generated output streams. An output has a type (text, HTML or image) that can be used by further
+output processing to handle the output properly.
+
 ### Extension
-
-## Future Plans
-
-So many ideas, so little time...
-
-Feel free to pick up an idea and implement it, but lets coordinate this to prevent of duplicate usage of resources on
-the same task.
-
-### Post-processing modules
-
-* Aggregation of separate start/stop events into one event that combines both attributes.
-* Mapping of values from documents returned by Elasticsearch to values from a database, e.g. Windows EventIDs to
-  descriptions, IPs to hostnames.
-* Find similar events around a specified event class (e.g. similar attacker activity around characteristic login events
-  or command line invocations)
-
-### Output modules
-
-* Interactive HTML
-* Graphical diagrams
-    * Relationsip diagrams, e.g. communication between hosts, process dependencies.
-* Textual tables
-* Textual documentation
-
-### Search Reusing Previous Results
-
-Search expressions in a later position that use results from previous EQUEL subexpressions.
-
-Example: search for spawning command line interpreters from uncommon processes and use session identifier to display
-actions performed in the spawned shells.
-
-### Relaxation of Strict Subexpression Type Order
-
-Example: output subexpression for intermediate results.
-
-### Adding Useful Operators to Searches
-
-At the end of a search:
-
-* groupby
-
-Connecting searches:
-
-* and
-* or
-* not
-
-### Remove Subexpression Type Declarations
-
-Remove agg, postproc and output keywords from first subexpression with a new type by assignment of verbs to types.
-
-### Web Frontend
-
-A web application as fronted for EQUEL that displays results and offers graphical visualization capabilities by
-additional output plugins. Should be a separate project.
 
 ## Credits
 
