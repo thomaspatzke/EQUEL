@@ -55,4 +55,8 @@ additional output plugins. Should be a separate project.
 
 ## Known Bugs
 
-* Further aggregations at main level
+* Further aggregations at root level not possible
+
+* Aggregationi plugins that add aggregations by the AggregationHierarchy instance passed as parameter, like
+  AggregationKeywordsPlugin, have no possibility to determine the name passed by user via 'as' keyword. The names are
+  therefore currently ignored.
