@@ -136,7 +136,7 @@ class TextOutputPlugin(BaseOutputPlugin, FieldSelectionMixin):
         if self.params['condensed']:
             suffix = " "
         result = ""
-        maxlen = self.params['maxvallen']
+        maxlen = int(self.params['maxvallen'])
         if type(docpart) == dict:
             for key in docpart:
                 if prefix == "":
@@ -241,7 +241,7 @@ class TextOutputPlugin(BaseOutputPlugin, FieldSelectionMixin):
                     for key in mainfieldpath:
                         docpart = docpart[key]
                     origval = str(docpart)
-                    val = origval[:self.params['maxmainlen']]
+                    val = origval[:int(self.params['maxmainlen'])]
                     output.append(self.colorize(val, "yellow", "on_blue", ["bold"]))
                     if len(origval) > len(val):
                         output.append(self.colorize("[...]", "yellow", "on_blue"))
