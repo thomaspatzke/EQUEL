@@ -57,3 +57,19 @@ class AggregationKeywordsPlugin(BasePlugin):
     def apply(self, verb, params, parser, ctx):
         for field in params.flags:
             parser.aggs.add(None, { self.translation[verb][0]: { self.translation[verb][1]: field } })
+
+class FilterAggregationPlugin(GenericAggregationPlugin):
+    """Filter aggregation with support for simple queries"""
+    name = "Filter Aggregation Plugin"
+    description = "Parameter 'querytype' defines query type (default: query_string)"
+
+    def apply(self, verb, *args, **kwargs):
+        res = super().apply(verb, *args, **kwargs)
+        try:
+            querytype = res["filter"]["querytype"]
+            del res["filter"]["querytype"]
+        except KeyError:
+            querytype = "query_string"
+
+        res["filter"] = { querytype: res["filter"] }
+        return res
