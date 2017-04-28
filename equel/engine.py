@@ -3,7 +3,9 @@ from .parser import EQUELParser
 from equel.plugins import generic, search, aggregate, output
 from .ant.equelParser import equelParser
 from antlr4 import InputStream, FileStream
+import arrow
 import json
+import re
 
 class EQUELEngine:
     """Main class for EQUEL usage"""
@@ -205,3 +207,67 @@ class EQUELOutput:
 
     def __iter__(self):
         return iter(self.streamlist)
+
+class EQUELTimeRange:
+    """Time range used to restrict queries"""
+    import arrow
+
+    def __init__(self, tfrom, tto=None, tz=None, estz=None, format=None, field="@timestamp"):
+        """
+        Initialize time range object with:
+
+        * tfrom: start date/time as string that gets parsed. This can also be a relative time value like -7d. In
+                 this case, format is ignored and it is calculated relative to the end time. Supported time units
+                 are: (h)ours, (d)ay, (w)eeks, (m)onths and (y)ears.
+
+        Optional:
+        * tto: end date/time. Current if not given.
+        * tz: timezone as string, local timezone if not given.
+        * estz: target timezone as string. All times are converted into this time zone. No conversion if not given.
+        * format: the format that is used to parse the time strings. If not given, arrow's default is used.
+        * field: ES field name, by default @timestamp.
+        """
+        
+        lt = arrow.now(tz)
+        tz = lt.tzinfo
+
+        # end time
+        if tto:
+            if format:
+                self.tto = arrow.get(tto, format).replace(tzinfo=tz)
+            else:
+                self.tto = arrow.get(tto).replace(tzinfo=tz)
+        else:
+            self.tto = lt
+
+        # start time
+        reltime_parsed = re.match("^-(\d+)([hdwmy])$", tfrom)
+        if reltime_parsed:
+            num = -int(reltime_parsed.group(1))
+            unit = reltime_parsed.group(2)
+            unitparam = {
+                    "h": "hours",
+                    "d": "days",
+                    "w": "weeks",
+                    "m": "months",
+                    "y": "years"
+                    }[unit]
+            self.tfrom = self.tto.shift(**{ unitparam: num })
+        else:
+            if format:
+                self.tfrom = arrow.get(tfrom, format).replace(tzinfo=tz)
+            else:
+                self.tfrom = arrow.get(tfrom).replace(tzinfo=tz)
+
+        # Conversion to ES target timezone
+        if estz:
+            self.tfrom = self.tfrom.tto(estz)
+            self.tto = self.tto.to(estz)
+
+        self.field = field
+
+    def getRangeQuery(self):
+        return { "range": { self.field: { "gte": self.tto.timestamp, "lte": self.tfrom.timestamp, "format": "epoch_millis" } } }
+
+    def __str__(self):
+        return "[ %s..%s ]" % (str(self.tfrom), str(self.tto))

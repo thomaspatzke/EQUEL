@@ -26,6 +26,7 @@ EQUEL was developed with Python 3. It depends on the following packages:
 * elasticsearch\_dsl (5.0.0)
 * antlr4-python3-runtime (4.6)
 * termcolor (1.1.0) - output plugin *text*
+* arrow (0.10) - EQUELTimeRange
 
 Tested versions are given in parentheses. Other versions may work, too. All these 
 modules are installable via pip.

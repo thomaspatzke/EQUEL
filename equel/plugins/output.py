@@ -177,10 +177,9 @@ class TextOutputPlugin(BaseOutputPlugin, FieldSelectionMixin):
             i = 0
             for bucket in agg['buckets']:   # iterate over buckets and print key and document count
                 i += 1
-                lastBucket = i == numBuckets
                 output.append(prefix)
                 bucketPrefix = "  "
-                if lastBucket:
+                if i == numBuckets:
                     output.append("└")
                 else:
                     output.append("├")
@@ -192,18 +191,38 @@ class TextOutputPlugin(BaseOutputPlugin, FieldSelectionMixin):
                 j = 0
                 for subaggName in subaggNames:    # iterate over sub aggregations
                     j += 1
-                    lastSubagg = j == numSubaggs
                     subagg = bucket[subaggName]
                     if type(subagg) == dict:
                         output.append(prefix + bucketPrefix)
                         subaggPrefix = "  "
-                        if lastSubagg:
+                        if j == numSubaggs:
                             output.append("└")
                         else:
                             output.append("├")
                             subaggPrefix = "│ "
                         output.appendLine(self.colorize(" Aggregation: ", "yellow") + subaggName)
                         self.render_aggregation(output, subagg, prefix + bucketPrefix + subaggPrefix)
+        elif "doc_count" in agg:    # nested aggregation
+            i = 0
+            numSubaggs = len(agg.keys()) - 1
+            for name, subagg in agg.items():
+                if name == "doc_count":
+                    continue
+                i += 1
+
+                output.append(prefix)
+                aggPrefix = "  "
+                if i == numSubaggs:
+                    output.append("└")
+                    aggPrefix = "  "
+                else:
+                    output.append("├")
+                    aggPrefix = "│ "
+                if 'doc_count' in subagg:
+                    output.appendLine((" %s " + self.colorize("(%d)", "red")) % (name, subagg['doc_count']))
+                else:
+                    output.appendLine(" %s " % name)
+                self.render_aggregation(output, subagg, prefix + aggPrefix)
         else:   # metrics aggregation
             numMetrics = len(agg)
             i = 0
