@@ -8,7 +8,8 @@ import codecs
 codecs.register_error('strict', codecs.replace_errors)
 
 from elasticsearch import Elasticsearch
-from equel.engine import EQUELEngine
+from equel.engine import EQUELEngine, EQUELTimeRange
+import arrow
 import json
 import sys
 
@@ -21,6 +22,8 @@ argparser.add_argument("--outputs", "-O", help="Select output streams as comma s
 argparser.add_argument("--compileonly", "-c", action="store_true", help="Only compile EQUEL to ES query - don't perform any requests")
 argparser.add_argument("--indent", "-I", type=int, default=2, help="Indent request with given width")
 argparser.add_argument("--file", "-f", action="store_true", help="Treat expression as file that contains an EQUEL expression")
+argparser.add_argument("--tstart", "-ts", default=None, help="Beginning of time frame that should be queried. May be absolute or relative value supported by EQUEL (negative offset from end time (-) and around expression (~) calculated relative to end time).")
+argparser.add_argument("--tend", "-te", default=None, help="End time. Default is current time. May be absolute time value or relative expression to start time (+)")
 argparser.add_argument("expression", help="Expression or file name")
 args = argparser.parse_args()
 
@@ -42,6 +45,16 @@ else:
     selected_outputs = None
 
 e = EQUELEngine(args.server, args.index)
+
+# use times if any given
+if args.tstart or args.tend:
+    try:
+        t = EQUELTimeRange(args.tstart, args.tend)
+        e.setDefaultTimeRange(t)
+    except arrow.parser.ParserError as err:
+        print("Failed to parse time: " + str(err))
+        sys.exit(2)
+
 if args.file:
     request = e.parseEQUELFile(args.expression)
 else:

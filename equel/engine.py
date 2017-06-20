@@ -37,13 +37,14 @@ class EQUELEngine:
             ]
     defaultOutput = output.BaseOutputPlugin
 
-    def __init__(self, host="localhost", index="*", timeout=60):
+    def __init__(self, host="localhost", index="*", timeout=60, timerange=None):
         """Initializes EQUEL engine"""
         self.host = host
         self.index = index
         self.timeout = timeout
         self.plugins = [dict(), dict(), dict(), dict(), dict()]
         self.registerDefaultPlugins()
+        self.setDefaultTimeRange(timerange)
 
     def parseEQUEL(self, equel, inputclass=InputStream, **kwargs):
         """Parse EQUEL expression and return elasticsearch_dsl Search object according to the query expression"""
@@ -124,6 +125,13 @@ class EQUELEngine:
         else:
             raise TypeError("Expression context type expected!")
 
+    def setDefaultTimeRange(self, t):
+        """Set default time range. All requests are restrcited to the time frame and field given in t."""
+        if isinstance(t, (EQUELTimeRange, type(None))):
+            self.timerange = t
+        else:
+            raise TypeError("Expected EQUELTimeRange")
+
 class EQUELRequest:
     def __init__(self, parsetree, engine):
         self.query = parsetree.query
@@ -134,7 +142,10 @@ class EQUELRequest:
         self.engine = engine
 
     def jsonQuery(self, **kwargs):
-        return json.dumps(self.query, **kwargs)
+        if self.engine.timerange:
+            return json.dumps(self.engine.timerange.wrapQuery(self.query), **kwargs)
+        else:
+            return json.dumps(self.query, **kwargs)
 
     def execute(self, *args, **kwargs):
         """Instantiates base elasticsearch_dsl Search object"""
@@ -211,53 +222,76 @@ class EQUELOutput:
 class EQUELTimeRange:
     """Time range used to restrict queries"""
     import arrow
+    RELOP_NEGATIVE_OFFSET = "-"
+    RELOP_AROUND = "~"
+    units = {
+            "s": "seconds",
+            "min": "minutes",
+            "h": "hours",
+            "d": "days",
+            "w": "weeks",
+            "m": "months",
+            "y": "years"
+            }
 
-    def __init__(self, tfrom, tto=None, tz=None, estz=None, format=None, field="@timestamp"):
+    def __init__(self, tfrom, tto=None, tz=None, estz=None, field="@timestamp"):
         """
         Initialize time range object with:
 
-        * tfrom: start date/time as string that gets parsed. This can also be a relative time value like -7d. In
-                 this case, format is ignored and it is calculated relative to the end time. Supported time units
-                 are: (h)ours, (d)ay, (w)eeks, (m)onths and (y)ears.
+        * tfrom: start date/time as string that gets parsed. This can also be:
+            * a relative time value like -7d. In this case, format is ignored and it is calculated relative to the end time. Supported time units
+              are: (s)econds, (min)utes, (h)ours, (d)ay, (w)eeks, (m)onths and (y)ears.
+            * an "around" expression like ~5m.
 
         Optional:
-        * tto: end date/time. Current if not given.
+        * tto: end date/time. Current if not given. May be a relative expression like +15min similar to tfrom relative time values
         * tz: timezone as string, local timezone if not given.
         * estz: target timezone as string. All times are converted into this time zone. No conversion if not given.
-        * format: the format that is used to parse the time strings. If not given, arrow's default is used.
         * field: ES field name, by default @timestamp.
         """
         
         lt = arrow.now(tz)
         tz = lt.tzinfo
+        relto_parsed = False
 
         # end time
         if tto:
-            if format:
-                self.tto = arrow.get(tto, format).replace(tzinfo=tz)
+            relto_parsed = re.match("^\\+(\d+)([shdwmy]|min)$", tto)
+            if not relto_parsed:    # if relative expression is given, postpone until from time is parsed
+                self.tto = arrow.get(tto).replace(tzinfo=tz)
             else:
                 self.tto = arrow.get(tto).replace(tzinfo=tz)
-        else:
+        else:   # if not given, take current time
             self.tto = lt
 
         # start time
-        reltime_parsed = re.match("^-(\d+)([hdwmy])$", tfrom)
-        if reltime_parsed:
-            num = -int(reltime_parsed.group(1))
-            unit = reltime_parsed.group(2)
-            unitparam = {
-                    "h": "hours",
-                    "d": "days",
-                    "w": "weeks",
-                    "m": "months",
-                    "y": "years"
-                    }[unit]
-            self.tfrom = self.tto.shift(**{ unitparam: num })
+        relfrom_parsed = re.match("^([~-])(\d+)([shdwmy]|min)$", tfrom)
+        if relfrom_parsed:
+            if relto_parsed:    # raise exception if from and to time are relative
+                raise ValueError("Only one time from a range may be relative")
+
+            op = relfrom_parsed.group(1)
+            num = int(relfrom_parsed.group(2))
+            unit = relfrom_parsed.group(3)
+            if op == self.RELOP_NEGATIVE_OFFSET:    # negative offset
+                unitparam = self.units[unit]
+                self.tfrom = self.tto.shift(**{ unitparam: -num })
+            elif op == self.RELOP_AROUND:           # around expression: [ to - offset : to + offset ]
+                unitparam = self.units[unit]
+                self.tfrom = self.tto.shift(**{ unitparam: -num })
+                self.tto = self.tto.shift(**{ unitparam: +num })
         else:
             if format:
                 self.tfrom = arrow.get(tfrom, format).replace(tzinfo=tz)
             else:
                 self.tfrom = arrow.get(tfrom).replace(tzinfo=tz)
+
+        # postponed end time processing in case on a relative time
+        if relto_parsed:
+            num = int(relto_parsed.group(1))
+            unit = relto_parsed.group(2)
+            unitparam = self.units[unit]
+            self.tto = self.tfrom.shift(**{ unitparam: num })
 
         # Conversion to ES target timezone
         if estz:
@@ -267,7 +301,12 @@ class EQUELTimeRange:
         self.field = field
 
     def getRangeQuery(self):
-        return { "range": { self.field: { "gte": self.tto.timestamp, "lte": self.tfrom.timestamp, "format": "epoch_millis" } } }
+        """Return time frame as ES DSL range query"""
+        return { "range": { self.field: { "gte": self.tfrom.timestamp * 1000, "lte": self.tto.timestamp * 1000, "format": "epoch_millis" } } }
+
+    def wrapQuery(self, query):
+        """Wrap existing query into query restricted to time range"""
+        return { "query": { "bool": { "must": [ query["query"], self.getRangeQuery() ] } } }
 
     def __str__(self):
         return "[ %s..%s ]" % (str(self.tfrom), str(self.tto))
