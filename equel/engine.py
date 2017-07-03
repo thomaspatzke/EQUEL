@@ -227,11 +227,11 @@ class EQUELTimeRange:
     RELOP_AROUND = "~"
     units = {
             "s": "seconds",
-            "min": "minutes",
+            "m": "minutes",
             "h": "hours",
             "d": "days",
             "w": "weeks",
-            "m": "months",
+            "mon": "months",
             "y": "years"
             }
 
@@ -257,7 +257,7 @@ class EQUELTimeRange:
 
         # end time
         if tto:
-            relto_parsed = re.match("^\\+(\d+)([shdwmy]|min)$", tto)
+            relto_parsed = re.match("^\\+(\d+)([shdwmy]|mon)$", tto)
             if not relto_parsed:    # if relative expression is given, postpone until from time is parsed
                 self.tto = arrow.get(tto).replace(tzinfo=tz)
             else:
@@ -266,7 +266,7 @@ class EQUELTimeRange:
             self.tto = lt
 
         # start time
-        relfrom_parsed = re.match("^([~-])(\d+)([shdwmy]|min)$", tfrom)
+        relfrom_parsed = re.match("^([~-])(\d+)([shdwmy]|mon)$", tfrom)
         if relfrom_parsed:
             if relto_parsed:    # raise exception if from and to time are relative
                 raise ValueError("Only one time from a range may be relative")
