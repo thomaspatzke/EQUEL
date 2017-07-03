@@ -27,6 +27,7 @@ class EQUELEngine:
             (PT_SEARCH, ["nest"], search.NestQueryPlugin),
             (PT_SEARCH, ["script"], search.ScriptQueryPlugin),
             (PT_SEARCH, ["scriptfield"], search.ScriptFieldPlugin),
+            (PT_SEARCH, ["timerange"], search.TimeRangePlugin),
             (PT_AGGREGATE, ["fallback"], aggregate.GenericAggregationPlugin),
             (PT_AGGREGATE, ["shortcut"], aggregate.AggregationShortcutPlugin),
             (PT_AGGREGATE, ["groupby", "add_sum", "add_min", "add_max", "valuecount"], aggregate.AggregationKeywordsPlugin),
@@ -281,10 +282,7 @@ class EQUELTimeRange:
                 self.tfrom = self.tto.shift(**{ unitparam: -num })
                 self.tto = self.tto.shift(**{ unitparam: +num })
         else:
-            if format:
-                self.tfrom = arrow.get(tfrom, format).replace(tzinfo=tz)
-            else:
-                self.tfrom = arrow.get(tfrom).replace(tzinfo=tz)
+            self.tfrom = arrow.get(tfrom).replace(tzinfo=tz)
 
         # postponed end time processing in case on a relative time
         if relto_parsed:

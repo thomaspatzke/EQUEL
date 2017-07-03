@@ -139,6 +139,23 @@ An aggregation is named agg*i* if no name is specified. *i* is an incrementing c
 
 These expressions simply follow the syntax stated above.
 
+## Time Ranges
+
+EQUEL can restrict the generated Elasticsearch query to a given time range. [Arrow](http://arrow.readthedocs.io/en/latest/) is used
+as library for date/time parsing and calculations. Therefore, all absolute dates and times must be given in formats supported by
+Arrow. In addition EQUEL implements some useful relative expressions:
+
+* -: relative start to given end time
+* +: relative end to given start time
+* ~ in from time: set start/end time around given end time
+
+Time ranges can be specified in different ways:
+
+* In an EQUELEngine instance by setting a default time range with the setDefaultTimeRange method that receives an
+  EQUELTimeRange object.
+* With the --tstart and --tend parameters of equel-cli.
+* In an EQUEL expression with the timerange search modifier, e.g. `* | timerange from=-4h | ...`
+
 ## Implementation Architecture
 
 ### Plugins

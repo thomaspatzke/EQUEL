@@ -162,3 +162,44 @@ class ScriptFieldPlugin(BaseSearchPlugin):
             parser.query['stored_fields'] = [ '_source' ]
 
         return res
+
+class TimeRangePlugin(BaseSearchPlugin):
+    """
+    Restricts search to given time range by adding an according filter to the query.
+
+    Parameters:
+    * from: start time
+    * to: end time (default: now)
+    * field: field used for time range filtering (default: @timestamp)
+
+    Times are expected as:
+
+    * Absolute: formats supported in Arrow default configuration.
+    * Relative: EQUEL relative time references:
+        * -: relative start to given end time
+        * +: relative end to given start time
+        * ~ in from time: set start/end time around given end time
+      Supported units are: s(econds), min(utes), h(ours), d(ays), w(eeks), m(onths), y(ears)
+    """
+    name = "Time Range"
+    description = "Restrict query to time range"
+
+    def apply(self, verb, params, parser, ctx):
+        from equel.engine import EQUELTimeRange
+
+        if 'from' not in params:
+            raise EQUELPluginException("Time range filter at least requires a start time in the from parameter")
+        start = params['from']
+        try:
+            end = params['to']
+        except KeyError:
+            end = None
+        try:
+            field = params['field']
+        except KeyError:
+            field = "@timestamp"
+
+        tr = EQUELTimeRange(start, end, field=field)
+        parser.query = tr.wrapQuery(parser.query)
+        return {}
+
